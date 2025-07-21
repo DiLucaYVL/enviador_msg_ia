@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Envio de Mensagens WhatsApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Sistema de Envio WhatsApp</h1>
+            <p>Gerencie e envie mensagens automatizadas para equipes</p>
+        </div>
+
+        <div class="content">
+            <div class="left-panel">
+                <div class="card">
+                    <h3><span class="icon">📂</span>Importar Arquivo CSV</h3>
+                    <div class="file-upload" id="fileUpload">
+                        <input type="file" id="csvFile" accept=".csv" />
+                        <label for="csvFile" class="file-upload-label">
+                            <span class="icon">📁</span>
+                            Clique ou arraste o arquivo CSV aqui
+                        </label>
+                    </div>
+                    <div class="file-name" id="fileName" style="display: none;"></div>
+                    <div id="equipesSelecionadas" style="display:none; margin-top: 20px;">
+                    <strong>Selecione as equipes que deseja enviar:</strong><br>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">⚙️</span>Configurações</h3>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="ignorarSabados" checked />
+                        <label for="ignorarSabados">Ignorar registros de sábado</label>
+                    </div>
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="debugMode" />
+                        <label for="debugMode">Modo Debug (mostrar dados brutos)</label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🏪</span>Selecionar Lojas</h3>
+                    <div class="filter-section">
+                        <div class="dropdown-container">
+                            <div class="dropdown-header" id="dropdownHeader">
+                                <span id="selectedCount">Carregando lojas...</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-content" id="dropdownContent">
+                                <div class="dropdown-item select-all-item">
+                                    <input type="checkbox" id="selectAllLojas" />
+                                    <label for="selectAllLojas"><strong>Marcar Todas</strong></label>
+                                </div>
+                                <div class="dropdown-separator"></div>
+                                <div class="dropdown-search">
+                                    <input type="text" id="searchLojas" placeholder="Buscar loja..." />
+                                </div>
+                                <div class="dropdown-list" id="dropdownList">
+                                    <!-- Lojas serão carregadas aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de debug -->
+                    <div class="debug-panel" id="debugPanel" style="display: none;">
+                        <h4>🔍 Dados Brutos da Planilha:</h4>
+                        <div class="debug-content" id="debugContent"></div>
+                    </div>
+                </div>
+
+                <button class="send-button" id="sendButton" disabled>
+                    <span class="icon">🚀</span>
+                    Enviar Mensagens
+                </button>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="card">
+                    <h3><span class="icon">📊</span>Estatísticas</h3>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalMessages">0</div>
+                            <div class="stat-label">Mensagens</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalTeams">0</div>
+                            <div class="stat-label">Gerentes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="successCount">0</div>
+                            <div class="stat-label">Enviadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="errorCount">0</div>
+                            <div class="stat-label">Erros</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">📝</span>Log de Atividades</h3>
+                    <div class="log-container" id="logContainer">
+                        <div class="log-entry log-info">Sistema iniciado. Aguardando arquivo CSV...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
