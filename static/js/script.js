@@ -1,12 +1,16 @@
 let arquivoSelecionado = null;
 
 document.getElementById('sendButton').addEventListener('click', async () => {
+    const sendButton = document.getElementById('sendButton');
+    sendButton.disabled = true;  // Desabilita botão imediatamente
+
     const file = arquivoSelecionado;
     const ignorarSabados = document.getElementById('ignorarSabados').checked;
     const debugMode = document.getElementById('debugMode')?.checked || false;
 
     if (!file) {
         alert("Selecione um arquivo CSV primeiro.");
+        sendButton.disabled = false;  // Reabilita botão em erro
         return;
     }
 
@@ -14,6 +18,60 @@ document.getElementById('sendButton').addEventListener('click', async () => {
     formData.append('csvFile', file);
     formData.append('ignorarSabados', ignorarSabados);
     formData.append('debugMode', debugMode);
+
+    const equipesSelecionadas = Array.from(document.querySelectorAll('input[name="equipes"]:checked'))
+        .map(e => e.value);
+    formData.append('equipesSelecionadas', JSON.stringify(equipesSelecionadas));
+
+    const logContainer = document.getElementById('logContainer');
+    const progressFill = document.getElementById('progressFill');
+    logContainer.innerHTML = `<div class="log-entry log-info">⏳ Enviando mensagens...</div>`;
+    progressFill.style.width = "25%";
+
+    try {
+        const response = await fetch('/enviar', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        logContainer.innerHTML = "";
+
+        if (data.success) {
+            data.log.forEach(entry => {
+                const div = document.createElement('div');
+                div.classList.add('log-entry', `log-${entry.type}`);
+                div.textContent = entry.message;
+                logContainer.appendChild(div);
+            });
+
+            document.getElementById('totalMessages').textContent = data.stats.total;
+            document.getElementById('totalTeams').textContent = data.stats.equipes;
+            document.getElementById('successCount').textContent = data.stats.sucesso;
+            document.getElementById('errorCount').textContent = data.stats.erro;
+            progressFill.style.width = "100%";
+
+            if (debugMode && data.debug) {
+                const debugPanel = document.getElementById('debugPanel');
+                const debugContent = document.getElementById('debugContent');
+                debugContent.textContent = JSON.stringify(JSON.parse(data.debug), null, 2);
+                debugPanel.style.display = "block";
+            }
+        } else {
+            throw new Error(data.log?.[0] || "Erro desconhecido.");
+        }
+    } catch (error) {
+        const div = document.createElement('div');
+        div.classList.add('log-entry', `log-error`);
+        div.textContent = error.message;
+        logContainer.appendChild(div);
+        progressFill.style.width = "0%";
+        alert(error.message);
+    } finally {
+        sendButton.disabled = false;  // Reabilita botão após término
+    }
+});
+
 
     const equipesSelecionadas = Array.from(document.querySelectorAll('input[name="equipes"]:checked'))
         .map(e => e.value);
