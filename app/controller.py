@@ -5,13 +5,16 @@ from app.whatsapp.numeros_equipes import carregar_numeros_equipes
 from app.processamento.log import configurar_log
 from collections import defaultdict
 from datetime import datetime
+import logging
 
 def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
+    logging.info(">>> ENTROU EM /enviar <<<")
     configurar_log()
     df = carregar_dados(caminho_csv, ignorar_sabados)
     mensagens_por_grupo = gerar_mensagens(df)
     numero_equipe = carregar_numeros_equipes()
 
+    
     mensagens_por_equipe_data = defaultdict(lambda: defaultdict(list))
     logs = []
     equipes_sem_numero = []  # 👈 acumula as equipes sem número
@@ -63,4 +66,5 @@ def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
         logs.append({"type": "warning", "message": f"⚠️ Números não encontrados para a(s) equipe(s): {lista_equipes}"})
 
     stats["equipes"] = len(stats["equipes"])
+    logging.info(">>> Finalizando processamento CSV. Total de equipes:", stats["total"])
     return logs, stats
