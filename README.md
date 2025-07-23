@@ -1,336 +1,199 @@
-# Nome do Projeto
 
-## Descrição
+# 🚀 Disparador de Mensagens PontoMais – TopFama
 
-Este projeto é uma aplicação web desenvolvida em Python utilizando o framework Flask. Ele permite o upload de arquivos CSV para processamento e análise de dados, com funcionalidades específicas para tratamento de equipes e gerenciamento de logs. A aplicação também possui uma interface web para interação com o usuário.
+Automatize o envio de **alertas de ponto** via WhatsApp para gestores da TopFama, com base em registros extraídos do sistema PontoMais. Desenvolvido para reduzir esforços manuais, garantir agilidade na comunicação e manter o compliance com a jornada de trabalho.
 
-## Funcionalidades
+---
 
-- Upload de arquivos CSV.
-- Processamento e análise de dados contidos nos CSVs.
-- Mapeamento e tratamento de equipes.
-- Geração de logs de processamento.
-- Interface web interativa para upload e visualização de resultados.
+## 📌 Índice
 
-## Tecnologias Utilizadas
+- [📌 Índice](#-índice)
+- [🧠 Visão Geral](#-visão-geral)
+- [🖼️ Interface Visual](#️-interface-visual)
+- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
+- [⚙️ Como Rodar o Projeto](#️-como-rodar-o-projeto)
+- [📄 Sobre o Arquivo CSV do PontoMais](#-sobre-o-arquivo-csv-do-pontomais)
+- [✅ Funcionalidades em Destaque](#-funcionalidades-em-destaque)
+- [🧑‍💻 Contribuição Interna](#-contribuição-interna)
+- [📄 Licença e Privacidade](#-licença-e-privacidade)
+- [🌟 Mensagem Final](#-mensagem-final)
 
-- Python
+---
+
+## 🧠 Visão Geral
+
+Este sistema realiza:
+
+- Upload e processamento inteligente de planilhas do PontoMais
+- Agrupamento por colaborador e data com múltiplas ocorrências
+- Mapeamento inteligente de equipes com nomes inconsistentes
+- Geração de mensagens personalizadas conforme tipo de ocorrência
+- Envio automático via API WAHA (gateway de WhatsApp)
+- Interface intuitiva com feedback visual: QR Code, logs, progresso e estatísticas
+
+🎯 **Objetivo:** Garantir que cada gestor receba os alertas de ocorrências da sua equipe de forma automatizada, confiável e personalizável.
+
+---
+
+## 🖼️ Interface Visual
+
+| QR Code de Conexão | Interface após conexão |
+|--------------------|------------------------|
+| ![](./print_qr.png) | ![](./print_main.png) |
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### 🔹 Backend
+- Python 3.10+
 - Flask
-- Pandas (para manipulação de dados)
-- NumPy (para operações numéricas)
-- python-dotenv (para gerenciamento de variáveis de ambiente)
-- Gunicorn (servidor WSGI)
-- HTML, CSS, JavaScript (para o frontend)
+- Pandas
+- WAHA API (`requests`)
+- Organização em Blueprints e módulos
 
-## Estrutura do Projeto
+### 🔹 Frontend
+- HTML5 + CSS3 modular (por componente)
+- JavaScript moderno (ES Modules)
+- UI reativa e responsiva
+- Fetch assíncrono e manipulação dinâmica do DOM
+
+---
+
+## 📁 Estrutura do Projeto
 
 ```
-.env
-app.py
-requirements.txt
-/app
-    /controller
-    /processamento
-    /routes.py
-/log
-/static
-    /css
-    /js
-    /img
-/templates
-/uploads
+├── app/
+│   ├── app.py
+│   ├── routes.py
+│   ├── controller.py
+│   ├── processamento/
+│   │   ├── csv_reader.py
+│   │   ├── log.py
+│   │   └── mapear_gerencia.py
+│   └── whatsapp/
+│       ├── mensagem.py
+│       ├── enviar_mensagem.py
+│       └── numeros_equipes.py
+│
+├── static/
+│   ├── css/
+│   └── js/
+│
+├── templates/
+│   └── index.html
+│
+├── log/
+└── .env
 ```
 
-## Instalação e Execução
+---
 
-### Pré-requisitos
+## ⚙️ Como Rodar o Projeto
 
-- Python 3.x
-- pip (gerenciador de pacotes do Python)
+### 1. Clonar o repositório
 
-### Passos
-
-1. Clone o repositório:
-
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd <nome_do_repositorio>
-   ```
-
-2. Crie e ative um ambiente virtual (recomendado):
-
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # Linux/macOS
-   # .venv\Scripts\activate   # Windows
-   ```
-
-3. Instale as dependências:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Crie um arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias (se houver). Exemplo:
-
-   ```
-   # Variáveis de ambiente aqui
-   ```
-
-5. Execute a aplicação:
-
-   ```bash
-   python app.py
-   ```
-
-   A aplicação estará disponível em `http://127.0.0.1:5000` (ou outra porta, dependendo da configuração).
-
-## Uso
-
-Após iniciar a aplicação, acesse a URL no seu navegador. Você poderá fazer o upload de arquivos CSV através da interface web e visualizar os resultados do processamento.
-
-## Contribuição
-
-Instruções sobre como contribuir para o projeto.
-
-## Licença
-
-Informações sobre a licença do projeto.
-
-## Contato
-
-Informações de contato para dúvidas ou suporte.
-
-
-
-
-### Detalhamento das Funcionalidades
-
-O projeto oferece um conjunto robusto de funcionalidades para o processamento e análise de dados de frequência e ocorrências, especialmente útil para departamentos de RH ou gestão de equipes. As principais funcionalidades incluem:
-
-1.  **Upload de Arquivos CSV**: A aplicação permite que o usuário faça o upload de arquivos no formato CSV através de uma interface web intuitiva. Esses arquivos são a fonte de dados para todas as operações subsequentes.
-
-2.  **Processamento Inteligente de Dados**: Após o upload, o sistema processa o CSV, realizando as seguintes operações:
-    *   **Carregamento de Dados**: Utiliza a biblioteca `pandas` para carregar o CSV, ignorando linhas de cabeçalho e rodapé desnecessárias (`skiprows=3`, `skipfooter=12`).
-    *   **Tratamento de Sábados**: Uma funcionalidade crucial é a capacidade de `ignorar_sabados`. Se ativada, o sistema identifica e remove registros de sábados que contenham ocorrências de 'Falta' ou 'Horas Faltantes' com valor '04:00', o que pode ser útil para ajustar cálculos de produtividade ou presença.
-    *   **Filtragem de Faltas Abonadas**: Registros de 'Falta' que são marcados como 'abonada' são automaticamente ignorados, garantindo que apenas faltas não justificadas sejam consideradas na análise.
-
-3.  **Mapeamento e Normalização de Equipes**: O sistema possui uma lógica avançada para padronizar os nomes das equipes. A função `mapear_equipe` (em `app/processamento/mapear_gerencia.py`) normaliza variações de nomes de equipes (ex: 'Loja L 66', 'Loja Nova 75') para um formato consistente (ex: '75', 'CD10', 'RH', 'Fintech', 'Marketing', etc.). Isso é fundamental para a agregação correta de dados por equipe.
-
-4.  **Geração de Mensagens Personalizadas**: Com base nos dados processados, o sistema gera mensagens detalhadas para cada indivíduo e data. Essas mensagens consolidam as ocorrências (ex: 'Atraso', 'Saída Antecipada', 'Falta') de forma clara e concisa.
-
-5.  **Envio de Mensagens via WhatsApp (Integração Potencial)**: Embora a implementação exata do envio via WhatsApp não esteja totalmente detalhada no código fornecido, a estrutura sugere uma integração para enviar as mensagens geradas diretamente para os números de telefone associados a cada equipe. O sistema verifica se há um número de WhatsApp cadastrado para a equipe e registra logs de sucesso ou erro no envio.
-
-6.  **Geração de Logs e Estatísticas**: Durante o processamento, a aplicação gera logs detalhados sobre o status de cada operação (sucesso, erro, avisos). Além disso, compila estatísticas importantes, como o número total de equipes processadas, mensagens enviadas com sucesso e erros de envio.
-
-7.  **Interface Web Interativa**: A aplicação oferece uma interface amigável onde o usuário pode:
-    *   Selecionar e fazer o upload do arquivo CSV.
-    *   Escolher opções de processamento, como `ignorarSabados` e `debugMode`.
-    *   Visualizar logs de processamento em tempo real.
-    *   Obter uma lista de equipes únicas presentes no CSV para seleção, permitindo processar dados apenas de equipes específicas.
-    *   Em modo de depuração (`debugMode`), é possível visualizar o DataFrame processado diretamente na interface, o que é útil para validação e desenvolvimento.
-
-Essas funcionalidades combinadas tornam o projeto uma ferramenta poderosa para automatizar e otimizar a gestão de dados de ocorrências e comunicação com equipes.
-
-
-
-## Arquitetura e Fluxo de Dados
-
-A arquitetura do projeto é modular, organizada para facilitar a manutenção e a escalabilidade. O fluxo de dados principal inicia-se com o upload de um arquivo CSV através da interface web e culmina na geração de mensagens processadas, potencialmente para envio via WhatsApp.
-
-### Visão Geral do Fluxo
-
-1.  **Interface do Usuário (`index.html`, `static/js/script.js`)**: O usuário interage com a aplicação através de um formulário web. Ele seleciona um arquivo CSV, define opções como `ignorarSabados` e `debugMode`, e pode pré-visualizar as equipes disponíveis no CSV.
-
-2.  **Backend (`app.py`, `app/routes.py`)**: As requisições do frontend são recebidas pelo servidor Flask. O arquivo `app.py` é o ponto de entrada da aplicação, registrando o blueprint `api_bp` que contém as rotas para o processamento.
-
-3.  **Processamento de Dados (`app/controller.py`, `app/processamento/`)**: O coração da lógica de negócio reside no `app/controller.py`, que orquestra o carregamento, tratamento e processamento dos dados do CSV, utilizando módulos auxiliares para tarefas específicas.
-
-4.  **Geração de Mensagens (`app/whatsapp/mensagem.py`)**: Com os dados processados, as mensagens são formatadas de acordo com regras predefinidas e templates.
-
-5.  **Envio e Log (`app/controller.py`, `app/whatsapp/enviar_mensagem.py`, `app/processamento/log.py`)**: As mensagens são então preparadas para envio (se houver integração com WhatsApp) e todas as etapas são registradas em logs para auditoria e depuração.
-
-### Detalhamento dos Módulos e Componentes
-
-#### `app.py`
-
-Este é o arquivo principal da aplicação Flask. Ele inicializa a aplicação, registra o `Blueprint` de API (`api_bp`) que define as rotas da aplicação, e serve a página `index.html` como a interface inicial. É o ponto de partida para a execução do servidor web.
-
-```python
-from flask import Flask, render_template
-from app.routes import api_bp
-
-app = Flask(__name__)
-app.register_blueprint(api_bp)
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-if __name__ == "__main__":
-    app.run(debug=True)
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
 ```
 
-#### `app/routes.py`
+### 2. Criar o ambiente virtual
 
-Este módulo define as rotas da API que interagem com o frontend. Ele lida com o upload de arquivos CSV, a extração de parâmetros da requisição (como `ignorarSabados`, `debugMode`, `equipesSelecionadas`), e a chamada para a lógica de processamento principal (`processar_csv`).
-
--   **`/enviar` (POST)**: Recebe o arquivo CSV e os parâmetros de configuração. Valida o arquivo, salva-o temporariamente e chama `processar_csv` para iniciar o fluxo de análise. Retorna logs e estatísticas do processamento.
--   **`/equipes` (POST)**: Recebe um arquivo CSV e retorna uma lista de equipes únicas encontradas no arquivo, após o mapeamento e tratamento, permitindo que o usuário selecione equipes específicas para processamento.
-
-```python
-from flask import Blueprint, request, jsonify
-from app.controller import processar_csv
-from werkzeug.utils import secure_filename
-import os
-import json
-
-api_bp = Blueprint("api", __name__)
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# ... (código das rotas /enviar e /equipes)
+```bash
+python -m venv venv
+source venv/bin/activate  # ou venv\Scripts\activate no Windows
 ```
 
-#### `app/controller.py`
+### 3. Instalar as dependências
 
-Este é o módulo central que orquestra o fluxo de processamento. A função `processar_csv` é responsável por:
-
-1.  **Configurar o Log**: Inicializa o sistema de log para registrar as operações.
-2.  **Carregar Dados**: Chama `carregar_dados` (`app/processamento/csv_reader.py`) para ler e pré-processar o CSV.
-3.  **Gerar Mensagens**: Invoca `gerar_mensagens` (`app/whatsapp/mensagem.py`) para criar as mensagens baseadas nas ocorrências.
-4.  **Carregar Números de Equipes**: Obtém os números de contato para cada equipe (presumivelmente de um arquivo ou banco de dados via `app/whatsapp/numeros_equipes.py`).
-5.  **Agrupar e Enviar Mensagens**: Itera sobre as mensagens geradas, agrupa-as por equipe e data, formata a mensagem final e tenta enviá-la via `enviar_whatsapp` (`app/whatsapp/enviar_mensagem.py`).
-6.  **Gerar Logs e Estatísticas**: Registra o sucesso ou falha de cada envio e compila estatísticas gerais do processo.
-
-```python
-from app.processamento.csv_reader import carregar_dados
-from app.whatsapp.mensagem import gerar_mensagens
-from app.whatsapp.enviar_mensagem import enviar_whatsapp
-from app.whatsapp.numeros_equipes import carregar_numeros_equipes
-from app.processamento.log import configurar_log
-from collections import defaultdict
-from datetime import datetime
-
-def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
-    # ... (lógica de processamento e envio)
+```bash
+pip install -r requirements.txt
 ```
 
-#### `app/processamento/csv_reader.py`
+### 4. Criar o arquivo `.env`
 
-Este módulo é responsável por carregar e realizar o pré-processamento inicial dos dados do arquivo CSV. A função `carregar_dados` utiliza a biblioteca `pandas` para:
-
--   **Leitura do CSV**: Lê o arquivo CSV, ignorando as primeiras 3 linhas e as últimas 12 linhas, que podem conter metadados ou rodapés irrelevantes.
--   **Tratamento de Sábados**: Se a opção `ignorar_sabados` for `True`, o código identifica e remove linhas correspondentes a sábados com ocorrências específicas de 'Falta' ou 'Horas Faltantes' (com valor '04:00'). Isso é feito através de uma lógica de `merge` e `drop` no DataFrame.
--   **Filtragem de Faltas Abonadas**: Remove do DataFrame todas as linhas onde a 'Ocorrência' é 'Falta' e o 'Valor' é 'abonada'.
--   **Mapeamento de Equipes**: Aplica a função `mapear_equipe` (`app/processamento/mapear_gerencia.py`) à coluna 'Equipe' para padronizar os nomes das equipes.
-
-```python
-import pandas as pd
-from app.processamento.mapear_gerencia import mapear_equipe
-
-def carregar_dados(caminho_csv, ignorar_sabados):
-    # ... (lógica de carregamento e tratamento do CSV)
+```env
+WAHA_URL=http://seu-endereco:3100
+WAHA_SESSION=default
+PLANILHA_EQUIPES_URL=https://docs.google.com/spreadsheets/...
 ```
 
-#### `app/processamento/mapear_gerencia.py`
+### 5. Iniciar o servidor
 
-Este módulo contém a lógica para padronizar os nomes das equipes. A função `mapear_equipe` recebe uma string (o nome da equipe) e retorna um nome padronizado. Ela utiliza expressões regulares e uma série de condicionais para mapear variações de nomes para categorias predefinidas (ex: 'CD10', 'Fintech', 'RH', 'Marketing', 'Obras', 'OPS', etc.). Isso é crucial para a consistência dos dados e para o agrupamento correto das informações.
-
-```python
-import re
-
-def mapear_equipe(txt):
-    # ... (lógica de mapeamento de equipes)
+```bash
+python app.py
 ```
 
-#### `app/processamento/log.py`
+---
 
-Este módulo configura o sistema de log da aplicação. A função `configurar_log` cria um diretório `log` (se não existir) e configura o `logging` do Python para registrar mensagens tanto no console quanto em um arquivo de log. O nome do arquivo de log é gerado dinamicamente com base na data e hora da execução, garantindo que cada execução tenha seu próprio registro.
+## 📄 Sobre o Arquivo CSV do PontoMais
 
-```python
-import logging
-import os
-from datetime import datetime
+O sistema processa arquivos `.CSV` exportados do relatório de **Ocorrências** do PontoMais.
 
-def configurar_log():
-    # ... (lógica de configuração de log)
+### 🔎 Exemplo de colunas
+
+| Nome                        | Equipe                             | Data            | Ocorrência         | Valor  |
+|-----------------------------|-------------------------------------|------------------|---------------------|--------|
+| Adeilso Cordeiro Rodrigues | Adm Departamento Pessoal \|HPS   | Sáb, 05/07/2025 | Falta               |        |
+| Adeilso Cordeiro Rodrigues | Adm Departamento Pessoal \|HPS   | Sáb, 05/07/2025 | Horas Faltantes     | 04:00  |
+
+### 🧠 Regras Aplicadas
+
+- Ignora as 3 primeiras e 12 últimas linhas do CSV
+- Ignora **faltas justificadas** (ex: “abonada”)
+- Remove registros de sábado com falta ou 04:00h (opcional)
+- Mapeia nomes de equipe com base em regras, regex e exceções conhecidas
+- Agrupa ocorrências por colaborador + data para gerar uma mensagem única por grupo
+
+### ✉️ Exemplo de Mensagem
+
+```
+*EQUIPE DP*
+
+*NO DIA 05/07/2025:*
+• Adeilso Cordeiro Rodrigues _faltou e ficou devendo_ 04:00 horas. Foi verificado o motivo da falta?
+
+*NO DIA 11/07/2025:*
+• Adeilso Cordeiro Rodrigues fez mais de 2 horas extras. _Total acumulado_: 00:42. Foi autorizado previamente?
 ```
 
-#### `app/whatsapp/mensagem.py`
+---
 
-Este módulo é responsável por gerar as mensagens de texto que serão enviadas. Ele contém:
+## ✅ Funcionalidades em Destaque
 
--   **`TEMPLATES`**: Um dicionário que mapeia tipos de ocorrências a templates de mensagens. Esses templates usam placeholders como `{nome}`, `{valor}`, `{horas}` que são preenchidos dinamicamente.
--   **`formatar_horas`**: Uma função utilitária para formatar valores de tempo (ex: '04:00' para '4:00 horas').
--   **`gerar_mensagem`**: Recebe um grupo de ocorrências para um colaborador em uma data específica e gera uma mensagem consolidada. Inclui lógica especial para tratar casos como 'Falta' combinada com 'Horas Faltantes' e uma regra para 'Horas Faltantes' acima de 3h30.
--   **`gerar_mensagens`**: Aplica a função `gerar_mensagem` a todo o DataFrame, agrupando as ocorrências por nome e data para gerar todas as mensagens necessárias.
+- [x] QR Code dinâmico para autenticação do WhatsApp
+- [x] Upload de CSV com validações robustas
+- [x] Filtros configuráveis (ex: ignorar sábados)
+- [x] Modo Debug para análise dos dados tratados
+- [x] Dropdown interativo para seleção de equipes
+- [x] Mensagens customizadas por tipo de ocorrência
+- [x] Log visual com status por equipe
+- [x] Painel de estatísticas com contadores atualizados em tempo real
 
-```python
-# === Templates com placeholders ===
-TEMPLATES = {
-    # ... (templates de mensagem)
-}
+---
 
-# === Formata valor de horas ===
-def formatar_horas(valor):
-    # ... (lógica de formatação de horas)
+## 🧑‍💻 Contribuição Interna
 
-# === Monta a mensagem por colaborador + data ===
-def gerar_mensagem(grupo):
-    # ... (lógica de geração de mensagem individual)
+Para membros da equipe TopFama Tech:
 
-# === Gera todas as mensagens agrupadas por Nome + Data ===
-def gerar_mensagens(df):
-    # ... (lógica de geração de mensagens em massa)
-```
+1. Crie uma branch com seu nome ou funcionalidade
+2. Faça alterações localmente e rode com `debug=True`
+3. Submeta PR para revisão com descrição clara do que foi alterado
+4. Use `log/` para validar execuções e o modo debug para validação do dataframe
 
-#### `app/whatsapp/enviar_mensagem.py` (Presumido)
+---
 
-Embora o conteúdo deste arquivo não tenha sido fornecido, a importação e o uso da função `enviar_whatsapp` em `app/controller.py` sugerem que este módulo é responsável pela integração real com a API do WhatsApp (ou um serviço similar) para o envio das mensagens. Ele provavelmente conteria a lógica para autenticação, formatação da requisição e tratamento da resposta da API do WhatsApp.
+## 📄 Licença e Privacidade
 
-#### `app/whatsapp/numeros_equipes.py` (Presumido)
+Este projeto é de **uso exclusivo e interno da TopFama**.  
+Reprodução, redistribuição ou exposição pública não autorizada é proibida.
 
-Similarmente, a importação e o uso de `carregar_numeros_equipes` em `app/controller.py` indicam que este módulo é responsável por carregar e fornecer os números de telefone associados a cada equipe. Isso poderia ser feito lendo um arquivo de configuração (JSON, CSV, etc.) ou consultando um banco de dados.
+---
 
-Esta estrutura modular permite que cada parte do sistema seja desenvolvida e testada de forma independente, facilitando a manutenção e a adição de novas funcionalidades no futuro.
+## 🌟 Mensagem Final
 
-
-
-#### `app/whatsapp/enviar_mensagem.py`
-
-Este módulo é responsável por interagir com a API do WhatsApp (ou um serviço similar, como o WAHA - WhatsApp HTTP API) para enviar as mensagens geradas. Ele utiliza variáveis de ambiente (`WAHA_URL`, `WAHA_SESSION`) para configurar a conexão com a API. A função `enviar_whatsapp` constrói o payload da requisição com o número do destinatário e a mensagem, e envia via requisição POST. Ele também registra logs de sucesso ou erro no envio.
-
-```python
-import requests
-import os
-from dotenv import load_dotenv
-import logging
-
-load_dotenv()
-WAHA_URL = os.getenv("WAHA_URL")
-WAHA_SESSION = os.getenv("WAHA_SESSION")
-
-def enviar_whatsapp(numero, mensagem, equipe=None):
-    # ... (lógica de envio de mensagem via API do WhatsApp)
-```
-
-#### `app/whatsapp/numeros_equipes.py`
-
-Este módulo é crucial para obter os números de telefone das equipes. A função `carregar_numeros_equipes` lê uma planilha (cujo URL é obtido de uma variável de ambiente `PLANILHA_EQUIPES_URL`) que contém o mapeamento entre o nome da equipe e seu número de contato. Ele realiza um pré-processamento nos números para garantir que estejam no formato correto (ex: `55DDNNNNNNNNN`), removendo caracteres não numéricos e padronizando prefixos. Isso garante que as mensagens sejam enviadas para os contatos corretos.
-
-```python
-import pandas as pd
-import os
-import re
-
-def limpar_numero_br(numero):
-    # ... (lógica de limpeza e padronização de números de telefone)
-
-def carregar_numeros_equipes():
-    # ... (lógica de carregamento de números de equipes de uma planilha)
-```
-
-Esta estrutura modular permite que cada parte do sistema seja desenvolvida e testada de forma independente, facilitando a manutenção e a adição de novas funcionalidades no futuro.
-
-
+> *“Lugar de Gente Feliz. Agora, também com código limpo.”*  
+> Feito com 💚 por Bruno di Luca | TopFama | OPS
+> Contato: bruno@grupotopfama.com.br
