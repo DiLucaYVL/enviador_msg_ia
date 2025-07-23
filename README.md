@@ -136,7 +136,7 @@ O sistema processa arquivos `.CSV` exportados do relatório de **Ocorrências** 
 
 | Nome                        | Equipe                             | Data            | Ocorrência         | Valor  |
 |-----------------------------|-------------------------------------|------------------|---------------------|--------|
-| Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Falta               |        |
+| Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Falta               | Abonada       |
 | Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Horas Faltantes     | 04:00  |
 
 ### 🧠 Regras Aplicadas
