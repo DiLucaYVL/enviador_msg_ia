@@ -1,0 +1,58 @@
+/* ===== LOG CONTAINER ===== */
+.log-container {
+    background: #2d3748;
+    color: #e2e8f0;
+    border-radius: 15px;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+    min-height: 200px;
+}
+
+.log-entry {
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.log-success {
+    background: rgba(72, 187, 120, 0.2);
+    color: #68d391;
+}
+
+.log-error {
+    background: rgba(245, 101, 101, 0.2);
+    color: #f56565;
+}
+
+.log-warning {
+    background: rgba(236, 201, 75, 0.2);
+    color: #ecc94b;
+}
+
+.log-info {
+    background: rgba(66, 153, 225, 0.2);
+    color: #63b3ed;
+}
+
+/* ===== BARRA DE PROGRESSO ===== */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 15px;
+    display: none;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #25D366, #128C7E);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+

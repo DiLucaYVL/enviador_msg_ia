@@ -1,0 +1,87 @@
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+    
+    .whatsapp-status-card {
+        margin: 0 20px;
+    }
+    
+    .status-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .qr-code {
+        max-width: 160px;
+    }
+    
+    .connection-steps {
+        gap: 10px;
+    }
+    
+    .step {
+        padding: 12px;
+    }
+    
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        border-radius: 15px;
+    }
+    
+    .header h1 {
+        font-size: 1.8em;
+    }
+    
+    .whatsapp-status-card {
+        margin: 0 10px;
+        padding: 20px;
+    }
+    
+    .content {
+        padding: 15px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .connection-message {
+        margin: 10px;
+        padding: 30px 20px;
+    }
+    
+    .connection-icon {
+        font-size: 3em;
+    }
+    
+    .connection-message h3 {
+        font-size: 1.5em;
+    }
+}
+

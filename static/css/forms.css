@@ -1,0 +1,94 @@
+/* ===== UPLOAD DE ARQUIVO ===== */
+.file-upload {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100%;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px dashed transparent;
+}
+
+.file-upload-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.file-upload.dragover .file-upload-label {
+    border-color: #25D366;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.file-name {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9em;
+    color: #666;
+    display: none;
+}
+
+/* ===== CHECKBOXES ===== */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #25D366;
+}
+
+.checkbox-container label {
+    font-size: 1em;
+    color: #555;
+    cursor: pointer;
+}
+
+/* ===== BOTÃO DE ENVIO ===== */
+.send-button {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.send-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(37, 211, 102, 0.3);
+}
+
+.send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
