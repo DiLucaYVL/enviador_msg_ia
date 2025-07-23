@@ -115,7 +115,7 @@ pip install -r requirements.txt
 ### 4. Criar o arquivo `.env`
 
 ```env
-WAHA_URL=http://seu-endereco:3100
+WAHA_URL=http://endereço-da-api-waha.com
 WAHA_SESSION=default
 PLANILHA_EQUIPES_URL=https://docs.google.com/spreadsheets/...
 ```
