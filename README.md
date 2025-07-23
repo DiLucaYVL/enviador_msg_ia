@@ -138,6 +138,7 @@ O sistema processa arquivos `.CSV` exportados do relatório de **Ocorrências** 
 |-----------------------------|-------------------------------------|------------------|---------------------|--------|
 | Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Falta               | Abonada       |
 | Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Horas Faltantes     | 04:00  |
+| Nome do funcionário | Departamento do funcionário   | Sáb, 11/07/2025 | Mais de duas horas extras     | 02:01  |
 
 ### 🧠 Regras Aplicadas
 
@@ -150,13 +151,13 @@ O sistema processa arquivos `.CSV` exportados do relatório de **Ocorrências** 
 ### ✉️ Exemplo de Mensagem
 
 ```
-*EQUIPE DP*
+*EQUIPE Departamento*
 
 *NO DIA 05/07/2025:*
-• Adeilso Cordeiro Rodrigues _faltou e ficou devendo_ 04:00 horas. Foi verificado o motivo da falta?
+• Nome do funcionário _faltou e ficou devendo_ 04:00 horas. Foi verificado o motivo da falta?
 
 *NO DIA 11/07/2025:*
-• Adeilso Cordeiro Rodrigues fez mais de 2 horas extras. _Total acumulado_: 00:42. Foi autorizado previamente?
+• Nome do funcionário fez mais de 2 horas extras. _Total acumulado_: 02:01. Foi autorizado previamente?
 ```
 
 ---
@@ -195,5 +196,5 @@ Reprodução, redistribuição ou exposição pública não autorizada é proibi
 ## 🌟 Mensagem Final
 
 > *“Lugar de Gente Feliz. Agora, também com código limpo.”*  
-> Feito com 💚 por Bruno di Luca | TopFama | OPS
+> Feito por Bruno di Luca | TopFama | OPS
 > Contato: bruno@grupotopfama.com.br
