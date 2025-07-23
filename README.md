@@ -196,5 +196,5 @@ Reprodução, redistribuição ou exposição pública não autorizada é proibi
 ## 🌟 Mensagem Final
 
 > *“Lugar de Gente Feliz. Agora, também com código limpo.”*  
-> Feito por Bruno di Luca | TopFama | OPS
+> *Feito por Bruno di Luca | TopFama | OPS*
 > Contato: bruno@grupotopfama.com.br
