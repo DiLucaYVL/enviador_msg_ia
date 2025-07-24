@@ -77,15 +77,34 @@ Este sistema realiza:
 │       ├── enviar_mensagem.py
 │       └── numeros_equipes.py
 │
-├── static/
-│   ├── css/
-│   └── js/
-│
-├── templates/
-│   └── index.html
+├── static
+│   ├── css
+│   │   ├── base.css
+│   │   ├── connection-message.css
+│   │   ├── dropdown.css
+│   │   ├── forms.css
+│   │   ├── header.css
+│   │   ├── logs.css
+│   │   ├── main-content.css
+│   │   ├── qr-code.css
+│   │   ├── responsive.css
+│   │   ├── stats.css
+│   │   └── whatsapp-status.css
+│   └── js
+│       ├── api.js
+│       ├── dragdrop.js
+│       ├── dropdown.js
+│       ├── eventos.js
+│       ├── helpers.js
+│       ├── main.js
+│       ├── ui.js
+│       └── whatsapp.js
+├── templates
+│   └── index.html
 │
 ├── log/
 └── .env
+
 ```
 
 ---
