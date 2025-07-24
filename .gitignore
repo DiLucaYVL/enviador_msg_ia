@@ -4,6 +4,7 @@
 /venv
 __pycache__/
 uploads/
+nginx.conf
 
 # Logs e relatórios
 logs
