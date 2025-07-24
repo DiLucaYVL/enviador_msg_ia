@@ -1,12 +1,16 @@
 /* ===== QR CODE SECTION ===== */
 .qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     padding: 20px;
     background: #F9FAFB;
     border-radius: 12px;
     border: 2px dashed #D1D5DB;
     transition: all 0.3s ease;
-    display: none;
+    position: relative; 
+    overflow: hidden; 
 }
 
 .qr-section:not([style*="display: none"]) {
@@ -14,33 +18,38 @@
 }
 
 .qr-frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    display: inline-block;
-    padding: 16px;
+    padding: 8px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .qr-code {
-    max-width: 800px;
+    max-width: 400px;
     height: auto;
-    border-radius: 8px;
+    width: 400%;
     display: block;
+    align-items: center;
 }
 
-.qr-overlay {
+/*.qr-overlay {
     position: absolute;
     top: 16px;
     left: 16px;
     right: 16px;
     bottom: 16px;
-    border: 2px solid #F59E0B;
+    border: 2px solid #c5c1b9;
     border-radius: 8px;
     pointer-events: none;
     overflow: hidden;
-}
+}*/
 
 .qr-instructions {
     color: #374151;
