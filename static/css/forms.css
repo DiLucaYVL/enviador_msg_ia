@@ -76,6 +76,8 @@
 .send-button {
     background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
     color: white;
+    width: 85%;
+    align-self: center;
     border: none;
     padding: 20px 40px;
     font-size: 1.2em;

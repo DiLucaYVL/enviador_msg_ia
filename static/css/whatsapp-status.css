@@ -30,14 +30,14 @@
     align-items: center;
     gap: 16px;
     padding: 16px;
-    background: #F9FAFB;
+    background: #e7e5e5;
     border-radius: 12px;
     margin-bottom: 16px;
     transition: all 0.3s ease;
 }
 
 .profile-section:hover {
-    background: #F3F4F6;
+    background: #cecece;
     transform: translateY(-1px);
 }
 
