@@ -4,19 +4,20 @@ import { mostrarLogs, atualizarEstatisticas, mostrarDebug, atualizarBarraProgres
 import { carregarDropdownEquipes } from './dropdown.js';
 
 let arquivoInput = document.getElementById('csvFile');
+let arquivoSelecionado = null;  // Arquivo mantido em memória
 
 export function configurarEventos() {
-    // Quando seleciona o arquivo, mostra nome e carrega equipes
+    // Quando o usuário seleciona um arquivo
     arquivoInput.addEventListener('change', async () => {
-        const file = arquivoInput.files[0];
-        if (!file) return;
+        arquivoSelecionado = arquivoInput.files[0];  // Armazena o arquivo selecionado
+        if (!arquivoSelecionado) return;
 
         document.getElementById('sendButton').disabled = false;
-        document.getElementById('fileName').textContent = `Arquivo selecionado: ${file.name}`;
+        document.getElementById('fileName').textContent = `Arquivo selecionado: ${arquivoSelecionado.name}`;
         document.getElementById('fileName').style.display = "block";
 
         const formData = new FormData();
-        formData.append('csvFile', file);
+        formData.append('csvFile', arquivoSelecionado);
         formData.append('ignorarSabados', document.getElementById('ignorarSabados').checked);
 
         try {
@@ -35,24 +36,27 @@ export function configurarEventos() {
         }
     });
 
-    // Quando clica em enviar
+    // Quando clica no botão Enviar
+    // Dentro do botão Enviar
     document.getElementById('sendButton').addEventListener('click', async () => {
-        const file = arquivoInput.files[0];
-        if (!file) {
+        const fileAtual = arquivoInput.files?.[0] || arquivoSelecionado;
+
+        if (!fileAtual) {
             alert("Selecione um arquivo CSV.");
             return;
         }
 
+        arquivoSelecionado = fileAtual; // Atualiza para manter válido
         const ignorarSabados = document.getElementById('ignorarSabados').checked;
         const debugMode = document.getElementById('debugMode')?.checked || false;
 
         const equipesSelecionadas = Array.from(document.querySelectorAll('input[name="equipes"]:checked'))
             .map(e => e.value);
 
-        const formData = gerarFormData(file, ignorarSabados, debugMode, equipesSelecionadas);
+        const formData = gerarFormData(fileAtual, ignorarSabados, debugMode, equipesSelecionadas);
 
         atualizarBarraProgresso("25%");
-        console.info("📦 Enviando arquivo:", file);
+        console.info("📦 Enviando arquivo:", arquivoSelecionado);
 
         try {
             const data = await enviarCSV(formData);
@@ -71,10 +75,11 @@ export function configurarEventos() {
                 mostrarDebug(data.debug);
             }
 
-            // Reset após envio
-            arquivoInput.value = "";
-            document.getElementById('sendButton').disabled = true;
-            document.getElementById('fileName').style.display = "none";
+            // MANTÉM o arquivo selecionado para reenvio
+            // Não limpar input nem variável
+            document.getElementById('sendButton').disabled = false;
+            document.getElementById('fileName').textContent = `Arquivo mantido: ${arquivoSelecionado.name}`;
+            document.getElementById('fileName').style.display = "block";
 
         } catch (error) {
             console.error("❌ Erro durante envio:", error);

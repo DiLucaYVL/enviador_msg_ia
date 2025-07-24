@@ -30,6 +30,13 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
+.file-upload.drag-over {
+    border: 2px dashed #4CAF50;
+    background-color: #f0fff0;
+    transition: all 0.2s ease-in-out;
+}
+
+
 .file-upload.dragover .file-upload-label {
     border-color: #25D366;
     background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
