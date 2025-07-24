@@ -7,7 +7,8 @@ TEMPLATES = {
     "Falta": "*{nome}* _faltou_. Foi verificado o motivo?",
     "Horas Faltantes": "*{nome}* ficou devendo *{horas}*.",
     "Interjornada insuficiente": "*{nome}* teve interjornada menor que 11h. _Tempo registrado_: *{horas}*. Houve compensação prevista?",
-    "Intrajornada insuficiente": "*{nome}* teve pausa de almoço menor que 1h. _Tempo registrado_: *{horas}*. Qual seria o motivo de não ter tirado o horário de almoço?"
+    "Intrajornada insuficiente": "*{nome}* teve pausa de almoço menor que 1h. _Tempo registrado_: *{horas}*. Qual seria o motivo de não ter tirado o horário de almoço?",
+    "Horas extras": "*{nome}* realizou horas extras. _Total_: *{valor}*. Essa jornada estendida foi necessária por alguma demanda específica?"
 }
 
 # === Formata valor de horas ===
