@@ -22,7 +22,7 @@ secrets.json
 *.pem
 *.key
 .zip
-/uploads
+uploads/
 
 # Arquivos do sistema operacional
 .DS_Store
