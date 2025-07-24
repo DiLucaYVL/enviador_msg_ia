@@ -3,6 +3,7 @@
 /.venv
 /venv
 __pycache__/
+uploads/
 
 # Logs e relatórios
 logs
@@ -22,7 +23,7 @@ secrets.json
 *.pem
 *.key
 .zip
-uploads/
+
 
 # Arquivos do sistema operacional
 .DS_Store
