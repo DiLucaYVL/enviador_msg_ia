@@ -37,7 +37,6 @@ export function configurarEventos() {
     });
 
     // Quando clica no botão Enviar
-    // Dentro do botão Enviar
     document.getElementById('sendButton').addEventListener('click', async () => {
         const fileAtual = arquivoInput.files?.[0] || arquivoSelecionado;
 
@@ -75,8 +74,6 @@ export function configurarEventos() {
                 mostrarDebug(data.debug);
             }
 
-            // MANTÉM o arquivo selecionado para reenvio
-            // Não limpar input nem variável
             document.getElementById('sendButton').disabled = false;
             document.getElementById('fileName').textContent = `Arquivo mantido: ${arquivoSelecionado.name}`;
             document.getElementById('fileName').style.display = "block";
@@ -87,3 +84,4 @@ export function configurarEventos() {
         }
     });
 }
+

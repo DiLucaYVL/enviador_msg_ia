@@ -12,6 +12,7 @@ def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
     configurar_log()
     df = carregar_dados(caminho_csv, ignorar_sabados)
     mensagens_por_grupo = gerar_mensagens(df)
+
     numero_equipe = carregar_numeros_equipes()
 
     
@@ -31,10 +32,11 @@ def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
 
     for equipe, datas in sorted(mensagens_por_equipe_data.items()):
         equipe = str(equipe).strip().upper()
-        numero = numero_equipe.get(equipe)
+        equipe_normalizada = equipe.strip().upper()
+        numero = numero_equipe.get(equipe_normalizada)
 
         # Filtrar equipes se necessário
-        if equipes_selecionadas and equipe not in equipes_selecionadas:
+        if equipes_selecionadas and equipe_normalizada not in {e.strip().upper() for e in equipes_selecionadas}:
             continue
        
 
@@ -49,13 +51,13 @@ def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
             for m in datas[data]:
                 mensagem_final += f"• {m.strip()}\n"
             mensagem_final += "\n"
-
+        
         try:
             enviar_whatsapp(numero, mensagem_final.strip(), equipe)
-            logs.append({"type": "success", "message": f"✅ Mensagem enviada para {equipe}"})
+            logs.append({"type": "success", "message": f" Mensagem enviada para {equipe}"})
             stats["sucesso"] += 1
         except Exception as e:
-            logs.append({"type": "error", "message": f"❌ Erro ao enviar para {equipe}: {str(e)}"})
+            logs.append({"type": "error", "message": f" Erro ao enviar para {equipe}: {str(e)}"})
             stats["erro"] += 1
 
         stats["total"] += 1
@@ -63,7 +65,7 @@ def processar_csv(caminho_csv, ignorar_sabados, equipes_selecionadas=None):
 
     if equipes_sem_numero:
         lista_equipes = ", ".join(equipes_sem_numero)
-        logs.append({"type": "warning", "message": f"⚠️ Números não encontrados para a(s) equipe(s): {lista_equipes}"})
+        logs.append({"type": "warning", "message": f" Números não encontrados para a(s) equipe(s): {lista_equipes}"})
 
     stats["equipes"] = len(stats["equipes"])
     logging.info(">>> Finalizando processamento CSV. Total de equipes:", stats["total"])
