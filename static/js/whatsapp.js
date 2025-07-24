@@ -54,7 +54,7 @@ export async function verificarStatusWhatsapp() {
             return;
         }
 
-        if (status === "WORKING" && engineState === "CONNECTED" || status === "WORKING") {
+        if (status === "WORKING") {
             const profileRes = await fetch("http://192.168.99.41:3100/api/default/profile");
 
             if (profileRes.ok) {
