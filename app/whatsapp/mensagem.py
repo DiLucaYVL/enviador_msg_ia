@@ -95,11 +95,21 @@ def gerar_mensagem(grupo):
         return f"*{nome}* _faltou e ficou devendo_ *{horas}*. Foi verificado o motivo da falta?"
 
     msgs = []
+
     for ocorr, valor in ocorrencias.items():
         tpl = TEMPLATES.get(ocorr)
         if not tpl:
             msgs.append(f"[Ocorrência não tratada: {ocorr}]")
             continue
+
+        if ocorr == "Horas extras":
+            try:
+                h, m = map(int, valor.strip().split(":"))
+                total_min = h * 60 + m
+                if total_min < 120:
+                    continue  # Ignora horas extras menores que 2h
+            except:
+                pass
 
         msg = tpl.format(
             nome=nome,
@@ -107,14 +117,6 @@ def gerar_mensagem(grupo):
             valor=valor,
             horas=formatar_horas(valor)
         )
-
-        if ocorr == "Horas Faltantes":
-            try:
-                h, m = map(int, valor.split(":"))
-                if h * 60 + m > 210:
-                    msg += " Houve falta?"
-            except:
-                pass
 
         msgs.append(msg)
 
