@@ -221,6 +221,19 @@
         </div>
     </div>
 
+        <!-- Modal de Screenshot -->
+    <div id="screenshotModal" class="modal-screenshot">
+    <div class="modal-content">
+        <h3>🖼️ Print da Sessão WhatsApp</h3>
+        <img id="screenshotImage" src="http://192.168.99.41:3100/api/screenshot?session=default" />
+        <div class="modal-buttons">
+        <button id="refreshScreenshot">🔄 Atualizar</button>
+        <button id="fecharScreenshot">❌ Fechar</button>
+        </div>
+    </div>
+    </div>
+
+
     <!-- Scripts -->
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/api.js') }}"></script>
@@ -231,6 +244,8 @@
     <script type="module" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/whatsapp.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/tipo-dropdown.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/screenshot.js') }}"></script>
+
 </body>
 </html>
 
