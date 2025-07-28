@@ -2,11 +2,30 @@ export function carregarDropdownEquipes(equipes) {
     const dropdownList = document.getElementById('dropdownList');
     const selectedCount = document.getElementById('selectedCount');
     const selectAllCheckbox = document.getElementById('selectAllLojas');
+    const searchInput = document.getElementById('searchLojas');
+    const dropdownHeader = document.getElementById('dropdownHeader');
+    const dropdownContent = document.getElementById('dropdownContent');
 
-    if (!dropdownList || !selectedCount) return;
+    if (!dropdownList || !selectedCount || !selectAllCheckbox || !searchInput || !dropdownHeader || !dropdownContent) {
+        console.error("Um ou mais elementos do dropdown não foram encontrados.");
+        return;
+    }
 
+    // 1. Remove listeners antigos usando uma propriedade customizada
+    if (selectAllCheckbox._boundHandler) {
+        selectAllCheckbox.removeEventListener('change', selectAllCheckbox._boundHandler);
+    }
+    if (searchInput._boundHandler) {
+        searchInput.removeEventListener('input', searchInput._boundHandler);
+    }
+    if (dropdownHeader._boundHandler) {
+        dropdownHeader.removeEventListener('click', dropdownHeader._boundHandler);
+    }
+
+    // 2. Limpa a lista de equipes para evitar duplicatas
     dropdownList.innerHTML = '';
 
+    // 3. Popula a lista com as novas equipes
     equipes.forEach(equipe => {
         const dropdownItem = document.createElement('div');
         dropdownItem.className = 'dropdown-item';
@@ -17,48 +36,79 @@ export function carregarDropdownEquipes(equipes) {
         dropdownList.appendChild(dropdownItem);
     });
 
-    function atualizarContadorSelecionadas() {
-        const checkboxes = document.querySelectorAll('#dropdownList input[type="checkbox"]');
-        const total = checkboxes.length;
-        const selecionadas = Array.from(checkboxes).filter(cb => cb.checked).length;
+    const allCheckboxes = dropdownList.querySelectorAll('input[type="checkbox"]');
 
-        if (selecionadas === total) {
-            selectedCount.textContent = `Todas as lojas (${total})`;
-        } else if (selecionadas === 0) {
+    // 4. Função centralizada para atualizar tudo (contador e checkbox "Selecionar Todos")
+    function atualizarStatus() {
+        const visiveis = Array.from(allCheckboxes).filter(cb => {
+            return !cb.closest('.dropdown-item').classList.contains('hidden');
+        });
+
+        const selecionadasVisiveis = visiveis.filter(cb => cb.checked).length;
+        const totalVisiveis = visiveis.length;
+
+        // Atualiza o texto do contador
+        if (totalVisiveis > 0 && selecionadasVisiveis === totalVisiveis) {
+            selectedCount.textContent = `Todas as lojas (${totalVisiveis})`;
+        } else if (selecionadasVisiveis === 0) {
             selectedCount.textContent = 'Nenhuma loja selecionada';
         } else {
-            selectedCount.textContent = `${selecionadas} de ${total} lojas`;
+            selectedCount.textContent = `${selecionadasVisiveis} de ${totalVisiveis} lojas`;
+        }
+
+        // Atualiza o estado do checkbox "Selecionar Todos"
+        if (totalVisiveis > 0 && selecionadasVisiveis === totalVisiveis) {
+            selectAllCheckbox.checked = true;
+            selectAllCheckbox.indeterminate = false;
+        } else if (selecionadasVisiveis > 0) {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = true;
+        } else {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
         }
     }
 
-    dropdownList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-        cb.addEventListener('change', atualizarContadorSelecionadas);
+    // 5. Configura os eventos com referências corretas
+
+    // Evento para "Selecionar Todos"
+    const selectAllHandler = () => {
+        const visiveis = Array.from(allCheckboxes).filter(cb => {
+            return !cb.closest('.dropdown-item').classList.contains('hidden');
+        });
+        visiveis.forEach(cb => cb.checked = selectAllCheckbox.checked);
+        atualizarStatus();
+    };
+    selectAllCheckbox._boundHandler = selectAllHandler;
+    selectAllCheckbox.addEventListener('change', selectAllHandler);
+
+    // Evento para cada checkbox de loja
+    allCheckboxes.forEach(cb => {
+        cb.addEventListener('change', atualizarStatus);
     });
 
-    if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', () => {
-            const checkboxes = dropdownList.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
-            atualizarContadorSelecionadas();
+    // Evento para a busca
+    const searchHandler = function () {
+        const termo = this.value.toLowerCase();
+        allCheckboxes.forEach(cb => {
+            const item = cb.closest('.dropdown-item');
+            const label = item.querySelector('label').textContent.toLowerCase();
+            item.classList.toggle('hidden', !label.includes(termo));
         });
-    }
+        atualizarStatus(); // Essencial para recalcular após o filtro
+    };
+    searchInput._boundHandler = searchHandler;
+    searchInput.addEventListener('input', searchHandler);
 
-    atualizarContadorSelecionadas();
+    // Evento para abrir/fechar o dropdown
+    const dropdownHandler = () => {
+        dropdownHeader.classList.toggle('active');
+        dropdownContent.classList.toggle('show');
+    };
+    dropdownHeader._boundHandler = dropdownHandler;
+    dropdownHeader.addEventListener('click', dropdownHandler);
 
-    const oldHeader = document.getElementById('dropdownHeader');
-    const dropdownContent = document.getElementById('dropdownContent');
-
-    if (oldHeader && dropdownContent) {
-        const newHeader = oldHeader.cloneNode(true);
-        oldHeader.replaceWith(newHeader); // substitui no DOM
-
-        newHeader.addEventListener('click', () => {
-            newHeader.classList.toggle('active');
-            dropdownContent.classList.toggle('show');
-        });
-    }
-
-
+    // Evento para fechar o dropdown ao clicar fora
     document.addEventListener('click', (e) => {
         if (!dropdownHeader.contains(e.target) && !dropdownContent.contains(e.target)) {
             dropdownHeader.classList.remove('active');
@@ -66,12 +116,6 @@ export function carregarDropdownEquipes(equipes) {
         }
     });
 
-    // Filtro de busca
-    document.getElementById('searchLojas')?.addEventListener('input', function () {
-        const termo = this.value.toLowerCase();
-        document.querySelectorAll('#dropdownList .dropdown-item').forEach(item => {
-            const label = item.querySelector('label').textContent.toLowerCase();
-            item.classList.toggle('hidden', !label.includes(termo));
-        });
-    });
+    // 6. Estado inicial
+    atualizarStatus();
 }

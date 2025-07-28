@@ -84,10 +84,15 @@ def processar_csv(caminho_csv, ignorar_sabados, tipo_relatorio, equipes_selecion
                 titulo += f" | {sufixo}"
 
             mensagem_final = f"*{titulo}*\n\n"
+
             for data in sorted(datas_sub.keys(), key=lambda d: datetime.strptime(d, "%d/%m/%Y")):
+                mensagens_validas = [m.strip() for m in datas_sub[data] if m and m.strip()]
+                if not mensagens_validas:
+                    continue  # Ignora essa data se não houver mensagens reais
+
                 mensagem_final += f"*NO DIA {data}:*\n"
-                for m in datas_sub[data]:
-                    mensagem_final += f"• {m.strip()}\n"
+                for m in mensagens_validas:
+                    mensagem_final += f"• {m}\n"
                 mensagem_final += "\n"
 
             try:
