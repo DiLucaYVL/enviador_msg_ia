@@ -22,19 +22,36 @@ export function configurarEventos() {
         formData.append('tipoRelatorio', document.getElementById('tipoRelatorio').value);
 
         try {
+            const tipoRelatorioAtual = document.getElementById('tipoRelatorio').value;
             const response = await fetch('/equipes', { method: 'POST', body: formData });
+
+            if (!response.ok) {
+                const texto = await response.text();  // Evita erro de JSON inválido
+                console.warn("Resposta erro (texto):", texto);
+
+                let msgErro = "Erro ao processar o arquivo CSV.";
+                if (tipoRelatorioAtual === "Ocorrências") {
+                    msgErro = "❌ O tipo de relatório selecionado foi 'Ocorrências', mas o arquivo não contém as colunas esperadas ('Motivo', 'Ação pendente', etc).";
+                } else if (tipoRelatorioAtual === "Auditoria") {
+                    msgErro = "❌ O tipo de relatório selecionado foi 'Auditoria', mas o arquivo está em formato incorreto.";
+                }
+
+                throw new Error(msgErro);
+            }
+
             const data = await response.json();
 
             if (data.success && Array.isArray(data.equipes)) {
                 carregarDropdownEquipes(data.equipes);
             } else {
-                alert('Erro ao carregar equipes do arquivo. Verifique o CSV.');
+                alert("Erro desconhecido ao processar o CSV.");
             }
 
         } catch (err) {
             console.error("Erro ao carregar equipes:", err);
-            alert("O CSV que você importou não possui a coluna EQUIPE \\n\\nSELECIONE ''EQUIPE'' AO EXPORTAR O RELATÓRIO NO PontoMais!!!");
+            alert(err.message || "Erro inesperado ao tentar ler o CSV.");
         }
+
     });
 
     // Quando clica no botão Enviar

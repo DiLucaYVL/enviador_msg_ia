@@ -45,14 +45,19 @@ export function carregarDropdownEquipes(equipes) {
 
     atualizarContadorSelecionadas();
 
-    // Dropdown toggle
-    const dropdownHeader = document.getElementById('dropdownHeader');
+    const oldHeader = document.getElementById('dropdownHeader');
     const dropdownContent = document.getElementById('dropdownContent');
 
-    dropdownHeader?.addEventListener('click', () => {
-        dropdownHeader.classList.toggle('active');
-        dropdownContent.classList.toggle('show');
-    });
+    if (oldHeader && dropdownContent) {
+        const newHeader = oldHeader.cloneNode(true);
+        oldHeader.replaceWith(newHeader); // substitui no DOM
+
+        newHeader.addEventListener('click', () => {
+            newHeader.classList.toggle('active');
+            dropdownContent.classList.toggle('show');
+        });
+    }
+
 
     document.addEventListener('click', (e) => {
         if (!dropdownHeader.contains(e.target) && !dropdownContent.contains(e.target)) {
