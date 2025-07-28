@@ -19,6 +19,7 @@ export function configurarEventos() {
         const formData = new FormData();
         formData.append('csvFile', arquivoSelecionado);
         formData.append('ignorarSabados', document.getElementById('ignorarSabados').checked);
+        formData.append('tipoRelatorio', document.getElementById('tipoRelatorio').value);
 
         try {
             const response = await fetch('/equipes', { method: 'POST', body: formData });
@@ -32,7 +33,7 @@ export function configurarEventos() {
 
         } catch (err) {
             console.error("Erro ao carregar equipes:", err);
-            alert("Falha ao carregar equipes.");
+            alert("O CSV que você importou não possui a coluna EQUIPE \\n\\nSELECIONE ''EQUIPE'' AO EXPORTAR O RELATÓRIO NO PontoMais!!!");
         }
     });
 
@@ -48,11 +49,12 @@ export function configurarEventos() {
         arquivoSelecionado = fileAtual; // Atualiza para manter válido
         const ignorarSabados = document.getElementById('ignorarSabados').checked;
         const debugMode = document.getElementById('debugMode')?.checked || false;
+        const tipoRelatorio = document.getElementById('tipoRelatorio').value;
 
         const equipesSelecionadas = Array.from(document.querySelectorAll('input[name="equipes"]:checked'))
             .map(e => e.value);
 
-        const formData = gerarFormData(fileAtual, ignorarSabados, debugMode, equipesSelecionadas);
+        const formData = gerarFormData(fileAtual, ignorarSabados, debugMode, equipesSelecionadas, tipoRelatorio);
 
         atualizarBarraProgresso("25%");
         console.info("📦 Enviando arquivo:", arquivoSelecionado);
@@ -84,4 +86,3 @@ export function configurarEventos() {
         }
     });
 }
-

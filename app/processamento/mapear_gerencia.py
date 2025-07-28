@@ -26,7 +26,13 @@ def mapear_equipe(txt):
     if "compras" in txt: return "Compras"
     if "contábil" in txt or "contabilidade" in txt: return "Contábil"
     if "controladoria" in txt: return "Controladoria"
-    if "financeiro" in txt: return "Financeiro"
+    
+    if "financeiro" in txt:
+        if "equipe 01" in txt: return "Financeiro 01"
+        if "equipe 02" in txt: return "Financeiro 02"
+        if "equipe 03" in txt: return "Financeiro 03"
+        return "Outro"
+    
     if "gente e gestão" in txt: return "RH"
     if "logística" in txt or "logistica" in txt: return "Produtos"
     if "marketing" in txt: return "Marketing"

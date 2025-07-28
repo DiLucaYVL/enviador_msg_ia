@@ -15,6 +15,9 @@ export async function verificarStatusWhatsapp() {
         const status = statusData.status?.toUpperCase();
         const engineState = statusData.engine?.state?.toUpperCase();
 
+        console.log("📡 Status WAHA:", status);
+        console.log("🧠 Engine State:", engineState);
+
         if (status === "STOPPED") {
             nomeElem.textContent = "🔄 Sessão parada. Reiniciando...";
             numeroElem.textContent = "";
@@ -45,12 +48,16 @@ export async function verificarStatusWhatsapp() {
             nomeElem.textContent = "📷 Escaneie o QR Code para conectar.";
             numeroElem.textContent = "";
             fotoElem.src = "";
+
             qrImage.src = "http://192.168.99.41:3100/api/default/auth/qr?format=image";
+            qrImage.style.display = "block";
             qrContainer.style.display = "block";
 
             mainContent.classList.add('hidden');
             connectionMessage.classList.remove('hidden');
             logoutSection.classList.add('hidden');
+
+            console.log("🟢 QR Code visível:", qrImage.src);
             return;
         }
 
@@ -112,7 +119,7 @@ export async function verificarStatusWhatsapp() {
         logoutSection.classList.add('hidden');
 
     } catch (err) {
-        console.error("Erro ao consultar status do WhatsApp:", err);
+        console.error("❌ Erro ao consultar status do WhatsApp:", err);
         nomeElem.textContent = "❌ Erro de conexão com WAHA.";
         numeroElem.textContent = "";
         fotoElem.src = "";

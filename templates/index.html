@@ -97,6 +97,27 @@
                         <input type="checkbox" id="debugMode" />
                         <label for="debugMode">Modo debug (desenvolvedores)</label>
                     </div>
+
+                    <div class="tipo-relatorio-container">
+                        <label for="tipoRelatorio">📊 Tipo de Relatório:</label>
+                        <div class="tipo-dropdown-container">
+                            <div id="tipoDropdownHeader" class="tipo-dropdown-header">
+                                <span id="tipoSelectedText" class="placeholder-text">Selecionar tipo de relatório...</span>
+                                <span class="tipo-dropdown-arrow">▼</span>
+                            </div>
+                            <div id="tipoDropdownContent" class="tipo-dropdown-content">
+                                <div class="tipo-dropdown-item" data-value="Auditoria">
+                                    <span class="tipo-icon">🔍</span>
+                                    <span class="tipo-text">Auditoria</span>
+                                </div>
+                                <div class="tipo-dropdown-item" data-value="Ocorrências">
+                                    <span class="tipo-icon">⚠️</span>
+                                    <span class="tipo-text">Ocorrências</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="tipoRelatorio" value="">
+                    </div>
                 </div>
 
                 <!-- Teams Selection Card -->
@@ -209,6 +230,7 @@
     <script type="module" src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
     <script type="module" src="{{ url_for('static', filename='js/whatsapp.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/tipo-dropdown.js') }}"></script>
 </body>
 </html>
 
