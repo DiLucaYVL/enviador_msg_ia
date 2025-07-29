@@ -16,16 +16,16 @@ TEMPLATES = {
 # === Templates para relatório de Ocorrências ===
 TEMPLATES_OCORRENCIAS = {
     ("Número de pontos menor que o previsto", "Colaborador solicitar ajuste"):
-        "*{nome}* teve menos pontos do que o previsto. O colaborador deve solicitar ajuste.",
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
 
     ("Número de pontos menor que o previsto", "Gestor corrigir lançamento de exceção"):
-        "*{nome}* teve menos pontos que o previsto. O gestor deve corrigir o lançamento de exceção.",
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
 
     ("Número de pontos menor que o previsto", "Gestor aprovar solicitação de ajuste"):
-        "*{nome}* registrou menos pontos. O gestor precisa aprovar a solicitação de ajuste.",
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
 
     ("Número errado de pontos", "Colaborador solicitar ajuste"):
-        "*{nome}* apresentou número incorreto de pontos. O colaborador deve pedir ajuste.",
+        "*{nome}* apresentou número incorreto de pontos. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
 
     ("Possui pontos durante exceção", "Gestor corrigir lançamento de exceção"):
         "*{nome}* teve pontos durante período de exceção. Gestor precisa corrigir o lançamento.",
