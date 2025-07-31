@@ -13,7 +13,18 @@ TEMPLATES = {
     "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Foi autorizado previamente?"
 }
 
-# === Funções auxiliares ===
+TEMPLATES_OCORRENCIAS = {
+    ("Número de pontos menor que o previsto", "Colaborador solicitar ajuste"):
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
+    ("Número de pontos menor que o previsto", "Gestor corrigir lançamento de exceção"):
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
+    ("Número de pontos menor que o previsto", "Gestor aprovar solicitação de ajuste"):
+        "*{nome}* registrou menos pontos que o normal. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
+    ("Número errado de pontos", "Colaborador solicitar ajuste"):
+        "*{nome}* apresentou número incorreto de pontos. Houve abono, folga ou falta no restante do período? Se sim, confira as horas trabalhadas: *mais de 4h exige 15min de intervalo; mais de 6h exige pelo menos 1h*. Se não for nenhum desses casos, faça apenas o ajuste necessário.",
+    ("Possui pontos durante exceção", "Gestor corrigir lançamento de exceção"):
+        "*{nome}* teve pontos durante período de exceção. Gestor precisa corrigir o lançamento.",
+}
 
 def converter_horas_para_minutos(valor_horas):
     try:
@@ -42,55 +53,65 @@ def normalizar(texto):
         return ""
     return unicodedata.normalize("NFKD", texto).encode("ASCII", "ignore").decode().strip().lower()
 
-# === Geração de mensagem individual por grupo (Nome + Data) ===
+def gerar_mensagens_ocorrencias(df):
+    def gerar_linha(row):
+        nome = row["Nome"]
+        data = row["Data"]
+        motivo = row["Motivo"]
+        acao = row["Ação pendente"]
+        chave = (motivo, acao)
+        tpl = TEMPLATES_OCORRENCIAS.get(chave)
+        if tpl:
+            return tpl.format(nome=nome, data=data)
+        else:
+            return f"*{nome}* em *{data}* apresentou: _{motivo}_.\nAção pendente: *{acao}*."
+
+    mensagens = df.groupby(["Nome", "Data"]).apply(
+        lambda g: "\n".join([gerar_linha(row) for _, row in g.iterrows()])
+    )
+    return mensagens.dropna()
 
 def gerar_mensagem(grupo):
     nome = grupo["Nome"].iloc[0]
     data = grupo["Data"].iloc[0]
     ocorrencias = grupo.set_index("Ocorrência")["Valor"].astype(str).to_dict()
-
-    # Normaliza as chaves e valores
     ocorrencias_norm = {normalizar(k): normalizar(v) for k, v in ocorrencias.items()}
+
+    falta_justificada_ou_abonada = grupo.get("FaltaAbonadaJustificada", False).any()
+    tem_falta = "falta" in ocorrencias_norm
+    tem_horas_faltantes = "horas faltantes" in ocorrencias_norm
+
+    # Caso especial: falta + horas faltantes no mesmo dia (ambos não justificados)
+    if tem_falta and tem_horas_faltantes and not falta_justificada_ou_abonada:
+        horas = ocorrencias.get("Horas Faltantes")
+        if horas and converter_horas_para_minutos(horas) >= 60:
+            return f"*{nome}* _faltou e ficou devendo_ *{formatar_horas(horas)}*. Foi verificado o motivo da falta?"
 
     msgs = []
     mensagens_set = set()
 
-    # Verifica se há falta justificada/abonada para a mesma pessoa e data
-    # Agora, verifica a nova coluna 'FaltaAbonadaJustificada' no grupo
-    falta_justificada_ou_abonada = grupo["FaltaAbonadaJustificada"].any()
-
-    # Ignora duplicidade entre duas ocorrências iguais
     tem_ambas_horas_extras = (
         "horas extras" in ocorrencias_norm and
         "mais de duas horas extras" in ocorrencias_norm and
         ocorrencias.get("Horas extras") == ocorrencias.get("Mais de duas horas extras")
     )
 
-    for index, row in grupo.iterrows(): # Itera sobre as linhas do grupo, não apenas as chaves de ocorrencias
+    for index, row in grupo.iterrows():
         ocorr = row["Ocorrência"]
         valor = row["Valor"]
-
         if not isinstance(ocorr, str) or ocorr.strip() == "":
             continue
 
         ocorr_norm = normalizar(ocorr)
-        valor_norm = normalizar(valor)
 
-        # ✅ Regra principal: ignora mensagem de horas faltantes se houver falta justificada
         if ocorr_norm == "horas faltantes" and falta_justificada_ou_abonada:
             continue
-
-        # Ignora a própria ocorrência de Falta se ela for abonada/justificada
-        if ocorr_norm == "falta" and row["FaltaAbonadaJustificada"]:
+        if ocorr_norm == "falta" and row.get("FaltaAbonadaJustificada", False):
             continue
-
         if tem_ambas_horas_extras and ocorr_norm == "mais de duas horas extras":
             continue
-
-        if ocorr_norm == "horas faltantes":
-            if converter_horas_para_minutos(valor) < 60:
-                continue
-
+        if ocorr_norm == "horas faltantes" and converter_horas_para_minutos(valor) < 60:
+            continue
         if ocorr_norm == "horas extras":
             try:
                 h, m = map(int, valor.strip().split(":"))
@@ -116,16 +137,13 @@ def gerar_mensagem(grupo):
 
     return "\n".join(msgs) if msgs else None
 
-# === Gera todas as mensagens agrupadas por Nome + Data ===
-
 def gerar_mensagens(df, tipo_relatorio):
     if tipo_relatorio == "Auditoria":
-        # Certifica-se de que a coluna 'FaltaAbonadaJustificada' existe antes de agrupar
         if 'FaltaAbonadaJustificada' not in df.columns:
-            df['FaltaAbonadaJustificada'] = False # Default para False se não existir
+            df['FaltaAbonadaJustificada'] = False
         mensagens = df.groupby(["Nome", "Data"], group_keys=False).apply(gerar_mensagem, include_groups=True)
+    elif tipo_relatorio == "Ocorrências":
+        mensagens = gerar_mensagens_ocorrencias(df)
     else:
         raise ValueError("Tipo de relatório inválido. Escolha \"Auditoria\" ou \"Ocorrências\".")
     return mensagens.dropna()
-
-
