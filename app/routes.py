@@ -4,6 +4,7 @@ import os
 import json
 import logging
 import uuid
+import traceback  # ✅ adicionado para mostrar erros completos
 
 from app.controller import processar_csv
 
@@ -16,7 +17,7 @@ def enviar():
     try:
         file = request.files.get('csvFile')
         ignorar_sabados = request.form.get('ignorarSabados', 'true') == 'true'
-        tipo_relatorio = request.form.get('tipoRelatorio', 'Auditoria')  # Novo campo para tipo de relatório
+        tipo_relatorio = request.form.get('tipoRelatorio', 'Auditoria')
         debug_mode = request.form.get('debugMode', 'false') == 'true'
 
         if not file:
@@ -25,7 +26,6 @@ def enviar():
         if not file.filename.lower().endswith('csv'):
             return jsonify({"success": False, "log": ["❌ Formato inválido. Envie um arquivo .csv"]}), 400
 
-        # 🔒 Gerar nome de arquivo único para evitar conflitos
         filename = secure_filename(file.filename)
         filename = f"{uuid.uuid4().hex[:8]}_{filename}"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
@@ -42,7 +42,6 @@ def enviar():
             from app.processamento.csv_reader import carregar_dados
             df_debug = carregar_dados(filepath, ignorar_sabados, tipo_relatorio).to_json(orient="records", force_ascii=False)
 
-        # 🧹 Remover o arquivo após uso
         if os.path.exists(filepath):
             os.remove(filepath)
 
@@ -54,7 +53,8 @@ def enviar():
         })
 
     except Exception as e:
-        logging.info(f"❌ ERRO EM /enviar: {str(e)}")
+        tb = traceback.format_exc()
+        logging.error("❌ EXCEÇÃO DETALHADA:\n" + tb)
         return jsonify({"success": False, "log": [f"❌ Erro interno no servidor: {str(e)}"]}), 500
 
 
@@ -91,4 +91,3 @@ def obter_equipes():
     finally:
         if os.path.exists(filepath):
             os.remove(filepath)
-
