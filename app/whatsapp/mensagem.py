@@ -31,6 +31,22 @@ TEMPLATES_OCORRENCIAS = {
         "*{nome}* teve pontos durante período de exceção. Gestor precisa corrigir o lançamento.",
 }
 
+# === Converte horas para minutos ===
+def converter_horas_para_minutos(valor_horas):
+    """
+    Converte uma string de horas no formato 'HH:MM' para minutos totais.
+    Exemplo: '01:30' -> 90 minutos
+    """
+    try:
+        if not isinstance(valor_horas, str) or ":" not in valor_horas:
+            return 0
+        
+        valor_limpo = valor_horas.strip()
+        horas, minutos = valor_limpo.split(":")
+        return int(horas) * 60 + int(minutos)
+    except (ValueError, AttributeError):
+        return 0
+
 # === Formata valor de horas ===
 def formatar_horas(valor):
     if not isinstance(valor, str) or ":" not in valor:
@@ -79,7 +95,7 @@ def gerar_mensagem(grupo):
     data = grupo["Data"].iloc[0]
     ocorrencias = grupo.set_index("Ocorrência")["Valor"].astype(str).to_dict()
 
-    # 💡 Regra nova: ignorar se tiver falta + horas e for justificada
+    # 💡 Regra: ignorar se tiver falta + horas e for justificada
     tem_falta = "Falta" in ocorrencias
     tem_horas = "Horas Faltantes" in ocorrencias
     falta_valor = normalizar(ocorrencias.get("Falta", ""))
@@ -90,10 +106,27 @@ def gerar_mensagem(grupo):
     if tem_falta and falta_justificada:
         return None
 
+    # 🆕 NOVA REGRA: Ignorar se horas faltantes for menor que 1 hora (60 minutos)
+    if tem_horas and not tem_falta:  # Apenas horas faltantes, sem falta
+        horas_faltantes_valor = ocorrencias.get("Horas Faltantes", "")
+        minutos_faltantes = converter_horas_para_minutos(horas_faltantes_valor)
+        
+        if minutos_faltantes < 60:  # Menos de 1 hora
+            return None  # Ignora a mensagem
+
     if tem_falta and tem_horas:
-        horas = formatar_horas(ocorrencias["Horas Faltantes"])
-        return f"*{nome}* _faltou e ficou devendo_ *{horas}*. Foi verificado o motivo da falta?"
-##################################################################################################
+        # Mesmo com falta, verifica se as horas são menores que 1 hora
+        horas_faltantes_valor = ocorrencias.get("Horas Faltantes", "")
+        minutos_faltantes = converter_horas_para_minutos(horas_faltantes_valor)
+        
+        if minutos_faltantes < 60:  # Menos de 1 hora
+            # Se tem falta mas horas < 1h, envia apenas mensagem de falta
+            return f"*{nome}* _faltou_. Foi verificado o motivo?"
+        else:
+            # Falta + horas >= 1h, envia mensagem completa
+            horas = formatar_horas(ocorrencias["Horas Faltantes"])
+            return f"*{nome}* _faltou e ficou devendo_ *{horas}*. Foi verificado o motivo da falta?"
+
     msgs = []
     mensagens_set = set()
 
@@ -107,6 +140,12 @@ def gerar_mensagem(grupo):
     for ocorr, valor in ocorrencias.items():
         if tem_ambas_horas_extras and ocorr == "Mais de duas horas extras":
             continue
+
+        # 🆕 FILTRO ADICIONAL: Ignora "Horas Faltantes" menores que 1 hora
+        if ocorr == "Horas Faltantes":
+            minutos_faltantes = converter_horas_para_minutos(valor)
+            if minutos_faltantes < 60:
+                continue  # Pula esta ocorrência
 
         tpl = TEMPLATES.get(ocorr)
         if not tpl:
@@ -136,7 +175,6 @@ def gerar_mensagem(grupo):
 
     # Retorna None se tudo foi filtrado
     return "\n".join(msgs) if msgs else None
-##################################################################################################
 
 # === Gera todas as mensagens agrupadas por Nome + Data ===
 def gerar_mensagens(df, tipo_relatorio):
