@@ -14,10 +14,18 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @api_bp.route('/enviar', methods=['POST'])
 def enviar():
+
     try:
         file = request.files.get('csvFile')
         ignorar_sabados = request.form.get('ignorarSabados', 'true') == 'true'
         tipo_relatorio = request.form.get('tipoRelatorio', 'Auditoria')
+        tipo_relatorio = tipo_relatorio.strip()
+        if tipo_relatorio not in {"Auditoria", "Ocorrências"}:
+            return jsonify({
+                "success": False,
+                "log": [{"type": "error", "message": f"❌ Tipo de relatório inválido: {tipo_relatorio}. Selecione 'Auditoria' ou 'Ocorrências'."}]
+            }), 400
+
         debug_mode = request.form.get('debugMode', 'false') == 'true'
 
         if not file:
@@ -38,9 +46,15 @@ def enviar():
         logs, stats = processar_csv(filepath, ignorar_sabados, tipo_relatorio, equipes_selecionadas)
 
         df_debug = None
+
         if debug_mode:
-            from app.processamento.csv_reader import carregar_dados
-            df_debug = carregar_dados(filepath, ignorar_sabados, tipo_relatorio).to_json(orient="records", force_ascii=False)
+            if tipo_relatorio == "Ocorrências":
+                from app.processamento.csv_reader_ocorrencias import carregar_dados_ocorrencias
+                df_debug = carregar_dados_ocorrencias(filepath).to_json(orient="records", force_ascii=False)
+            else:
+                from app.processamento.csv_reader import carregar_dados
+                df_debug = carregar_dados(filepath, ignorar_sabados, tipo_relatorio).to_json(orient="records", force_ascii=False)
+
 
         if os.path.exists(filepath):
             os.remove(filepath)
