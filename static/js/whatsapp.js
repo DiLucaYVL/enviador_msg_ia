@@ -1,3 +1,6 @@
+// IMPORTAÇÃO ATUALIZADA
+import { carregarConfig } from './config.js';
+
 export async function verificarStatusWhatsapp() {
     const nomeElem = document.getElementById('whatsappNome');
     const numeroElem = document.getElementById('whatsappNumero');
@@ -8,8 +11,11 @@ export async function verificarStatusWhatsapp() {
     const connectionMessage = document.getElementById('connectionMessage');
     const logoutSection = document.getElementById('logoutSection');
 
+    // 🟢 CARREGANDO CONFIG
+    const { api_url } = await carregarConfig();
+
     try {
-        const statusRes = await fetch("http://192.168.99.41:3100/api/sessions/default");
+        const statusRes = await fetch(`${api_url}/api/sessions/default`);
         const statusData = await statusRes.json();
 
         const status = statusData.status?.toUpperCase();
@@ -28,7 +34,7 @@ export async function verificarStatusWhatsapp() {
             connectionMessage.classList.remove('hidden');
             logoutSection.classList.add('hidden');
 
-            await fetch("http://192.168.99.41:3100/api/sessions/default/start", { method: "POST" });
+            await fetch(`${api_url}/api/sessions/default/start`, { method: "POST" });
             return;
         }
 
@@ -49,7 +55,7 @@ export async function verificarStatusWhatsapp() {
             numeroElem.textContent = "";
             fotoElem.src = "";
 
-            qrImage.src = "http://192.168.99.41:3100/api/default/auth/qr?format=image";
+            qrImage.src = `${api_url}/api/default/auth/qr?format=image`;
             qrImage.style.display = "block";
             qrContainer.style.display = "block";
 
@@ -62,7 +68,7 @@ export async function verificarStatusWhatsapp() {
         }
 
         if (status === "WORKING") {
-            const profileRes = await fetch("http://192.168.99.41:3100/api/default/profile");
+            const profileRes = await fetch(`${api_url}/api/default/profile`);
 
             if (profileRes.ok) {
                 const perfil = await profileRes.json();
@@ -137,10 +143,12 @@ export async function fazerLogoutWhatsapp() {
     const logoutButton = document.getElementById('logoutButton');
 
     try {
+        const { api_url } = await carregarConfig();
+
         logoutButton.disabled = true;
         logoutButton.innerHTML = '<span class="logout-icon">⏳</span><span class="logout-text">Desconectando...</span>';
 
-        const response = await fetch("http://192.168.99.41:3100/api/sessions/default/logout", {
+        const response = await fetch(`${api_url}/api/sessions/default/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

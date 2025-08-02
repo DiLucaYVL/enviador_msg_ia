@@ -1,13 +1,14 @@
 import requests
-import os
+import json
 import logging
 import time
 import random
-from dotenv import load_dotenv
 
-load_dotenv()
-WAHA_URL = os.getenv("WAHA_URL")
-WAHA_SESSION = os.getenv("WAHA_SESSION")
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+WAHA_URL = config["WAHA_URL"]
+WAHA_SESSION = config["WAHA_SESSION"]
 
 def _send_seen(chat_id):
     requests.post(f"{WAHA_URL}/api/sendSeen", json={"session": WAHA_SESSION, "chatId": chat_id})
@@ -50,6 +51,3 @@ def enviar_whatsapp(numero, mensagem, equipe=None):
     except Exception as e:
         logging.error(f"❌ Falha ao enviar para {numero} - {e}")
         raise
-
-    except Exception as e:
-        logging.error(f"❌ Erro ao enviar para {numero}: {e}")

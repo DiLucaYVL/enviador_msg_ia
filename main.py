@@ -1,5 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from app.routes import api_bp
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.register_blueprint(api_bp)

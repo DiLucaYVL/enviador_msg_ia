@@ -4,7 +4,7 @@ import os
 import json
 import logging
 import uuid
-import traceback  # ✅ adicionado para mostrar erros completos
+import traceback
 
 from app.controller import processar_csv
 

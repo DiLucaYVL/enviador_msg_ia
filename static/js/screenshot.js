@@ -1,3 +1,5 @@
+import { carregarConfig } from './config.js'; // Agora carrega a URL do config.json
+
 document.addEventListener("DOMContentLoaded", function() {
     const avatar = document.querySelector(".avatar-placeholder");
     const modal = document.getElementById("screenshotModal");
@@ -13,8 +15,9 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.style.display = "flex";
         });
 
-        refresh.addEventListener("click", function() {
-            img.src = "http://192.168.99.41:3100/api/screenshot?session=default&t=" + Date.now();
+        refresh.addEventListener("click", async function() {
+            const { api_url } = await carregarConfig(); // Carrega a URL da API do config.json
+            img.src = `${api_url}/api/screenshot?session=default&t=` + Date.now();
         });
 
         fechar.addEventListener("click", function() {

@@ -24,7 +24,7 @@ def processar_csv(caminho_csv, ignorar_sabados, tipo_relatorio, equipes_selecion
         "Data do ponto": "Data",
         "Data Registro": "Data"
     }, inplace=True)
-    print("🧪 Colunas carregadas:", df.columns.tolist())
+    logging.info("🧪 Colunas carregadas:", df.columns.tolist())
 
     df["EquipeTratada"] = df["EquipeTratada"].astype(str).str.strip().str.upper()
 
