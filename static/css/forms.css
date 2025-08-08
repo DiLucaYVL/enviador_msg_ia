@@ -1,0 +1,376 @@
+/* ===== UPLOAD DE ARQUIVO ===== */
+.file-upload {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    width: 100%;
+}
+
+.placeholder-text {
+    color: #888;
+    font-style: italic;
+}
+
+.upload-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px dashed transparent;
+}
+
+.file-upload-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.file-upload.drag-over {
+    border: 2px dashed #4CAF50;
+    background-color: #f0fff0;
+    transition: all 0.2s ease-in-out;
+}
+
+
+.file-upload.dragover .file-upload-label {
+    border-color: #25D366;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.file-name {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9em;
+    color: #666;
+    display: none;
+}
+
+/* ===== TIPO RELATÓRIO DROPDOWN ===== */
+.tipo-relatorio-container {
+    margin-bottom: 20px;
+}
+
+.tipo-relatorio-container label {
+    display: block;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tipo-dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.tipo-dropdown-header {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+    min-height: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tipo-dropdown-header:hover {
+    border-color: #25D366;
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.15);
+}
+
+.tipo-dropdown-header.active {
+    border-color: #25D366;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: linear-gradient(135deg, #f0fff0 0%, #e0f7e0 100%);
+}
+
+.tipo-dropdown-arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.7em;
+    color: #25D366;
+    font-weight: bold;
+}
+
+.tipo-dropdown-header.active .tipo-dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.tipo-dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #25D366;
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 1000;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    display: none;
+    overflow: hidden;
+}
+
+.tipo-dropdown-content.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tipo-dropdown-item {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.95em;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.tipo-dropdown-item:hover {
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+    transform: translateX(3px);
+}
+
+.tipo-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.tipo-dropdown-item.selected {
+    background: linear-gradient(135deg, #e8f5e8 0%, #d4f4d4 100%);
+    font-weight: 600;
+    color: #128C7E;
+}
+
+.tipo-icon {
+    font-size: 1.1em;
+    width: 20px;
+    text-align: center;
+}
+
+.tipo-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* Efeito de destaque no header */
+.tipo-dropdown-header::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 4px;
+    height: 4px;
+    background: linear-gradient(45deg, #25D366, #128C7E);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.tipo-dropdown-header:hover::before {
+    opacity: 1;
+    animation: dotPulse 1.5s infinite;
+}
+
+/* ===== SELECT CONTAINER (FALLBACK) ===== */
+.select-container {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.select-container label {
+    display: block;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.select-container select {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1em;
+    font-weight: 500;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    appearance: none;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select-container select:hover {
+    border-color: #25D366;
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.15);
+}
+
+.select-container select:focus {
+    outline: none;
+    border-color: #25D366;
+    background: linear-gradient(135deg, #f0fff0 0%, #e0f7e0 100%);
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1), 0 8px 25px rgba(37, 211, 102, 0.2);
+}
+
+/* Ícone de seta personalizado */
+.select-container::after {
+    content: '▼';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #25D366;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.select-container:hover::after {
+    color: #128C7E;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Estilos para as opções */
+.select-container select option {
+    padding: 12px;
+    background: white;
+    color: #333;
+    font-weight: 500;
+}
+
+.select-container select option:hover {
+    background: #f0fff0;
+}
+
+/* Animação de pulso para destacar */
+.select-container select:focus {
+    animation: selectPulse 0.6s ease-in-out;
+}
+
+@keyframes selectPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Efeito visual adicional com pseudo-elemento */
+.select-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 6px;
+    height: 6px;
+    background: linear-gradient(45deg, #25D366, #128C7E);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.select-container:hover::before {
+    opacity: 1;
+    animation: dotPulse 1.5s infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+    50% { transform: translateY(-50%) scale(1.3); opacity: 0.7; }
+}
+
+/* ===== CHECKBOXES ===== */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #25D366;
+}
+
+.checkbox-container label {
+    font-size: 1em;
+    color: #555;
+    cursor: pointer;
+}
+
+/* ===== BOTÃO DE ENVIO ===== */
+.send-button {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    width: 85%;
+    align-self: center;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.send-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(37, 211, 102, 0.3);
+}
+
+.send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+

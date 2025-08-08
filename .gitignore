@@ -1,0 +1,47 @@
+# Dependências
+/node_modules
+/.venv
+/venv
+__pycache__/
+uploads/
+nginx.conf
+config.json
+
+# Logs e relatórios
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos sensíveis ou secretos
+.env
+.env.*
+secrets.json
+*.pem
+*.key
+.zip
+
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Pastas de build e dist
+/dist/
+/build/
+/coverage/
+/out/
+/target/
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+

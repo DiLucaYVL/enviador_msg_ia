@@ -1,0 +1,126 @@
+/* ===== DROPDOWN ===== */
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-header {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.dropdown-header:hover {
+    border-color: #25D366;
+}
+
+.dropdown-header.active {
+    border-color: #25D366;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.dropdown-header.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #25D366;
+    border-top: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.select-all-item {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.dropdown-separator {
+    height: 1px;
+    background-color: #ddd;
+    margin: 5px 0;
+}
+
+.dropdown-search {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-search input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.dropdown-search input:focus {
+    outline: none;
+    border-color: #25D366;
+}
+
+.dropdown-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #25D366;
+}
+
+.dropdown-item label {
+    cursor: pointer;
+    flex: 1;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.dropdown-item.hidden {
+    display: none;
+}
+

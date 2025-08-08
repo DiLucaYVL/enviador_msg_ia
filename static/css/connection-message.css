@@ -1,0 +1,73 @@
+/* ===== MENSAGEM DE CONEXÃO ===== */
+.connection-message {
+    padding: 40px;
+    text-align: center;
+    background: #F9FAFB;
+    margin: 20px;
+    border-radius: 16px;
+    border: 2px dashed #D1D5DB;
+    transition: all 0.3s ease;
+}
+
+.connection-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.connection-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+    animation: rotate 2s linear infinite;
+}
+
+.connection-message h3 {
+    font-size: 1.8em;
+    color: #374151;
+    margin-bottom: 10px;
+}
+
+.connection-message p {
+    font-size: 1.1em;
+    color: #6B7280;
+    margin-bottom: 30px;
+}
+
+.connection-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.step-text {
+    color: #374151;
+    font-weight: 500;
+}
+
+.connection-message.hidden {
+    display: none;
+}
+

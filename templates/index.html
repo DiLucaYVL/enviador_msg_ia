@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="icon" href="https://lojastopfama.com.br/sobre/topfama_icon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopFama | Diparador de Mensagens PontoMais</title>
+    
+    <!-- CSS Modularizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/whatsapp-status.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/qr-code.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/connection-message.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-content.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stats.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Disparador de Avisos de Ponto</h1>
+            <p>Mensagens automatizadas para os gestores de cada equipe (Setor/Loja)</p>
+            
+            <!-- Card de Status do WhatsApp -->
+            <div class="whatsapp-status-card">
+               
+                <div class="profile-section">
+                    <div class="profile-avatar">
+                        <img id="whatsappFoto" class="profile-photo" src="" alt="" style="display: none;">
+                        <div class="avatar-placeholder">👤</div>
+                    </div>
+                    <div class="profile-info">
+                        <div id="whatsappNome" class="profile-name">🔄 Verificando conexão...</div>
+                        <div id="whatsappNumero" class="profile-number">Aguarde...</div>
+                    </div>
+                    <div class="connection-status">
+                        <div class="status-pulse"></div>
+                    </div>
+                </div>
+                
+                <!-- Botão de Logout (visível apenas quando conectado) -->
+                <div id="logoutSection" class="logout-section hidden">
+                    <button id="logoutButton" class="logout-button">
+                        <span class="logout-icon">⛔</span>
+                        <span class="logout-text">Desconectar WhatsApp</span>
+                    </button>
+                </div>
+                
+                <!-- QR Code Section -->
+                <div id="qrContainer" class="qr-section">
+                    <div class="qr-overlay" > </div>     
+                    <div class="qr-frame">
+                        
+                        <img id="qrImage" class="qr-code" src="" alt="QR Code">
+                                                                
+                    </div>
+                    <div class="qr-instructions">
+                        <p>Escaneie com o WhatsApp</p>
+                        <small>Abra o WhatsApp > Clique em "⋮" > Dispositivos conectados > Conectar um dispositivo</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content - Interface principal (oculta até WhatsApp conectar) -->
+        <div id="mainContent" class="content hidden">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Upload Card -->
+                <div class="card">
+                    <h3><span class="icon">📁</span>Upload do Arquivo CSV</h3>
+                    <div class="file-upload">
+                        <input type="file" id="csvFile" accept=".csv" />
+                        <label for="csvFile" class="file-upload-label">
+                            <span class="icon">⬆️</span>
+                            Selecionar arquivo CSV
+                        </label>
+                    </div>
+                    <div id="fileName" class="file-name"></div>
+                </div>
+
+                <!-- Settings Card -->
+                <div class="card">
+                    <h3><span class="icon">⚙️</span>Configurações</h3>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="ignorarSabados" checked />
+                        <label for="ignorarSabados">Ignorar sábados no envio</label>
+                    </div>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="debugMode" />
+                        <label for="debugMode">Modo debug (desenvolvedores)</label>
+                    </div>
+
+                    <div class="tipo-relatorio-container">
+                        <label for="tipoRelatorio">📊 Tipo de Relatório:</label>
+                        <div class="tipo-dropdown-container">
+                            <div id="tipoDropdownHeader" class="tipo-dropdown-header">
+                                <span id="tipoSelectedText" class="placeholder-text">Selecionar tipo de relatório...</span>
+                                <span class="tipo-dropdown-arrow">▼</span>
+                            </div>
+                            <div id="tipoDropdownContent" class="tipo-dropdown-content">
+                                <div class="tipo-dropdown-item" data-value="Auditoria">
+                                    <span class="tipo-icon">🔍</span>
+                                    <span class="tipo-text">Auditoria</span>
+                                </div>
+                                <div class="tipo-dropdown-item" data-value="Ocorrências">
+                                    <span class="tipo-icon">⚠️</span>
+                                    <span class="tipo-text">Ocorrências</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="tipoRelatorio" value="">
+                    </div>
+                </div>
+
+                <!-- Teams Selection Card -->
+                <div class="card">
+                    <h3><span class="icon">👥</span>Seleção de Equipes</h3>
+                    
+                    <div class="checkbox-container select-all-item">
+                        <input type="checkbox" id="selectAllLojas" checked />
+                        <label for="selectAllLojas">Selecionar todas as lojas</label>
+                    </div>
+                    
+                    <div class="dropdown-container">
+                        <div id="dropdownHeader" class="dropdown-header">
+                            <span id="selectedCount">Aguardando arquivo CSV...</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div id="dropdownContent" class="dropdown-content">
+                            <div class="dropdown-search">
+                                <input type="text" id="searchLojas" placeholder="Buscar lojas..." />
+                            </div>
+                            <div class="dropdown-separator"></div>
+                            <div id="dropdownList" class="dropdown-list">
+                                <!-- Equipes serão carregadas aqui dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Send Button -->
+                <button id="sendButton" class="send-button" disabled>
+                    <span class="icon">🚀</span>
+                    Enviar Mensagens
+                </button>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Log Card -->
+                <div class="card">
+                    <h3><span class="icon">📋</span>Log de Execução</h3>
+                    <div id="logContainer" class="log-container">
+                        <div class="log-entry log-info">ℹ️ Sistema iniciado. Aguardando ações...</div>
+                    </div>
+                    <div id="progressBar" class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Statistics Card -->
+                <div class="card">
+                    <h3><span class="icon">📊</span>Estatísticas</h3>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div id="totalMessages" class="stat-number">0</div>
+                            <div class="stat-label">Total de Mensagens</div>
+                        </div>
+                        <div class="stat-card">
+                            <div id="totalTeams" class="stat-number">0</div>
+                            <div class="stat-label">Equipes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div id="successCount" class="stat-number">0</div>
+                            <div class="stat-label">Sucessos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div id="errorCount" class="stat-number">0</div>
+                            <div class="stat-label">Erros</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Debug Panel (hidden by default) -->
+                <div id="debugPanel" class="debug-panel">
+                    <h4>🔧 Informações de Debug</h4>
+                    <div id="debugContent" class="debug-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading/Connection Message -->
+        <div id="connectionMessage" class="connection-message">
+            <div class="connection-content">
+                <div class="connection-icon">⏳</div>
+                <h3>Aguardando conexão do WhatsApp</h3>
+                <p>Para usar o sistema, é necessário que o WhatsApp esteja conectado.</p>
+                <div class="connection-steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <span class="step-text">Escaneie o QR Code acima</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <span class="step-text">Aguarde a confirmação de conexão</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <span class="step-text">A interface será liberada automaticamente</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scripts -->
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/eventos.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/helpers.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/whatsapp.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/tipo-dropdown.js') }}"></script>
+
+</body>
+</html>
+
