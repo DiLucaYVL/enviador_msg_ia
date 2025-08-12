@@ -20,36 +20,18 @@ def _get_headers():
         "apikey": EVOLUTION_TOKEN
     }
 
-def _send_presence(numero, presence="composing"):
-    """Envia status de presença (composing/paused)"""
-    try:
-        url = f"{EVOLUTION_URL}/message/setPresence/{EVOLUTION_INSTANCE}"
-        payload = {
-            "number": numero,
-            "presence": presence
-        }
-        requests.post(url, json=payload, headers=_get_headers())
-    except Exception as e:
-        logging.warning(f"Erro ao enviar presença: {e}")
-
 def enviar_whatsapp(numero, mensagem, equipe=None):
-    """
-    Envia mensagem via Evolution API
-    
-    Args:
-        numero: Número no formato brasileiro (ex: 5561999999999)
-        mensagem: Texto da mensagem
-        equipe: Nome da equipe (opcional, apenas para log)
-    """
-    # Evolution API espera número no formato internacional sem caracteres especiais
     numero_formatado = numero.replace("+", "").replace("-", "").replace(" ", "")
-    
     url = f"{EVOLUTION_URL}/message/sendText/{EVOLUTION_INSTANCE}"
     
     payload = {
         "number": numero_formatado,
         "textMessage": {
             "text": mensagem
+        },
+        "options": {
+            "delay": 50,                # Delay antes do envio (ms)
+            "presence": "composing"     # Mostra como "digitando..."
         }
     }
 
@@ -57,12 +39,7 @@ def enviar_whatsapp(numero, mensagem, equipe=None):
         logging.info(f"⏳ Enviando para {numero_formatado} (Equipe: {equipe})")
         logging.info(f"Payload: {payload}")
 
-        # Simula digitação
-        _send_presence(numero_formatado, "composing")
-        time.sleep(random.uniform(2, 4))
-        _send_presence(numero_formatado, "paused")
-
-        # Envia a mensagem
+        # Envia diretamente com delay e presence no payload
         response = requests.post(url, json=payload, headers=_get_headers())
 
         logging.info(f"Evolution API status: {response.status_code}")
@@ -71,7 +48,6 @@ def enviar_whatsapp(numero, mensagem, equipe=None):
         if response.status_code not in [200, 201]:
             raise Exception(f"Erro Evolution API: {response.status_code} - {response.text}")
 
-        # Verifica se a resposta contém erro
         response_data = response.json()
         if not response_data.get("success", True):
             raise Exception(f"Erro na resposta: {response_data.get('message', 'Erro desconhecido')}")
