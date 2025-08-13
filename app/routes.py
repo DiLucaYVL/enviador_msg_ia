@@ -136,3 +136,8 @@ def obter_equipes():
     finally:
         if os.path.exists(filepath):
             os.remove(filepath)
+
+@api_bp.route('/.well-known/<path:subpath>')
+def well_known(subpath):
+    # Não serve nada; só evita poluir o log com 404
+    return ("", 204)
