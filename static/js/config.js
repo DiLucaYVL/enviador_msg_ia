@@ -4,7 +4,7 @@ let CONFIG = null;
 export async function carregarConfig() {
     if (CONFIG) return CONFIG;
 
-            const response = await fetch('/static/config.json', { cache: 'no-store' });
+        const response = await fetch('/static/config.json');
         const json = await response.json();
 
         CONFIG = {
