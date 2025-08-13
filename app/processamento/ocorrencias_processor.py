@@ -31,7 +31,7 @@ def processar_ocorrencias(df):
             )
         elif motivo == "Número errado de pontos":
             return (
-                f"*{nome}* está com o _{motivo.lower()}_.\n"
+                f"*{nome}* apresentou _{motivo.lower()}_.\n"
                 f"Ação pendente: *{acao_pendente}*."
             )
         else:
