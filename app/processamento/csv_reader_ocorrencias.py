@@ -1,5 +1,6 @@
 import pandas as pd
 from app.processamento.mapear_gerencia import mapear_equipe
+from app.processamento.motivos_ocorrencias import validar_motivo, validar_acao_pendente
 
 def carregar_dados_ocorrencias(caminho_csv):
     """
@@ -29,6 +30,10 @@ def carregar_dados_ocorrencias(caminho_csv):
     
     # Remover linhas com dados vazios ou inválidos
     df = df.dropna(subset=['Nome', 'Data', 'Motivo', 'Ação pendente'])
-    
+
+    # Valida se os motivos são os que estão listados
+    df = df[df['Motivo'].apply(validar_motivo)]
+    df = df[df['Ação pendente'].apply(validar_acao_pendente)]    
+
     return df
 

@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     configurarEventos();
     configurarDragAndDrop();
     verificarStatusWhatsapp();
-    setInterval(verificarStatusWhatsapp, 5000);
+    setInterval(verificarStatusWhatsapp, 1000);
     
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {

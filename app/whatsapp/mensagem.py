@@ -16,6 +16,9 @@ TEMPLATES = {
 
 # === Funções auxiliares ===
 
+def validar_ocorrencia(ocorrencia):
+    return ocorrencia in TEMPLATES
+
 def converter_horas_para_minutos(valor_horas):
     try:
         if not isinstance(valor_horas, str) or ":" not in valor_horas:

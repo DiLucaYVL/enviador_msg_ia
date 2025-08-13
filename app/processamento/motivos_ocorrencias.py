@@ -1,7 +1,8 @@
 # Mapeamento dos tipos de motivos para o relatório de ocorrências
 MOTIVOS_OCORRENCIAS = {
     "Número de pontos menor que o previsto": "Número de pontos menor que o previsto",
-    "Possui pontos durante exceção": "Possui pontos durante exceção"
+    "Possui pontos durante exceção": "Possui pontos durante exceção",
+    "Número errado de pontos": "Número errado de pontos",
 }
 
 # Mapeamento dos tipos de ações pendentes para o relatório de ocorrências

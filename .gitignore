@@ -6,6 +6,7 @@ __pycache__/
 uploads/
 nginx.conf
 config.json
+config.js
 
 # Logs e relatórios
 logs
@@ -45,3 +46,4 @@ desktop.ini
 *.sublime-project
 *.sublime-workspace
 
+static/js/config.js

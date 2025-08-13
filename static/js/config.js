@@ -10,7 +10,7 @@ export async function carregarConfig() {
 
         CONFIG = {
             api_url: json.EVOLUTION_URL,            
-            instance: json.EVOLUTION_INSTANCE || "PontoDP",
+            instance: json.EVOLUTION_INSTANCE || "Teste",
             token: json.EVOLUTION_TOKEN || "T0pF4m4D3vs"
         };
 
@@ -20,7 +20,7 @@ export async function carregarConfig() {
 
         CONFIG = {
             api_url: 'http://192.168.99.41:8080',
-            instance: 'PontoDP',
+            instance: 'Teste',
             token: 'T0pF4m4D3vs'
         };
 

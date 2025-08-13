@@ -1,10 +1,12 @@
 import pandas as pd
 from app.processamento.mapear_gerencia import mapear_equipe
 from app.processamento.csv_reader_ocorrencias import carregar_dados_ocorrencias
+from app.whatsapp.mensagem import validar_ocorrencia
 
 def carregar_dados(caminho_csv, ignorar_sabados, tipo_relatorio):
     if tipo_relatorio == "Auditoria":
         df = pd.read_csv(caminho_csv, skiprows=3, skipfooter=12, engine="python")
+
         # === Ignorar determinados registros de sábado
         if ignorar_sabados:
             # Limpar e identificar sábados
@@ -41,6 +43,9 @@ def carregar_dados(caminho_csv, ignorar_sabados, tipo_relatorio):
         # Remover colunas temporárias se existirem
         df.drop(columns=["DataLimpa", "DataFormatada"], errors="ignore", inplace=True)
 
+        df = df[df["Ocorrência"].apply(validar_ocorrencia)]
+
+        equipes_validas = sorted(df["EquipeTratada"].dropna().unique().tolist())
         return df
     elif tipo_relatorio == "Ocorrências":
         return carregar_dados_ocorrencias(caminho_csv)

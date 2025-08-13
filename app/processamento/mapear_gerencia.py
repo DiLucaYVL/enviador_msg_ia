@@ -49,3 +49,4 @@ def eh_loja(txt):
     txt = txt.replace("loja  l ", "loja ")
     txt = txt.replace("loja  ", "loja ")
     return bool(re.search(r"\b(?:loja|filial)[^\da-zA-Z]*(?:nova)?\s*([a-z]?\d{1,3}[a-z]?)\b", txt, re.IGNORECASE))
+
