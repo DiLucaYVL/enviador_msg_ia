@@ -11,7 +11,7 @@ TEMPLATES = {
     "Horas Faltantes": "*{nome}* ficou devendo *{horas}*. Por favor *justificar*.",
     "Interjornada insuficiente": "*{nome}* teve interjornada (período mínimo de descanso entre um expediente e outro) menor que 11h. _Tempo registrado_: *{horas}*.",
     "Intrajornada insuficiente": "*{nome}* teve pausa de almoço menor que 1h. _Tempo registrado_: *{horas}*.",
-    "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Por favor *justificar*."
+    "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Por favor *ajustar*."
 }
 
 # === Funções auxiliares ===
@@ -76,7 +76,7 @@ def gerar_mensagem(grupo):
 
     if tem_falta and tem_horas_faltantes:
         valor_faltante = ocorrencias.get("Horas Faltantes") or ocorrencias.get("horas faltantes")
-        msg = f"*{nome}* _faltou_ e _ficou devendo_ *{formatar_horas(valor_faltante)}*."
+        msg = f"*{nome}* _faltou_ e _ficou devendo_ *{formatar_horas(valor_faltante)}*. Por favor *ajustar*."
         return msg
 
     
