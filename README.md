@@ -1,6 +1,6 @@
 # TopFama - Disparador de Mensagens PontoMais
 
-> Automação inteligente de avisos de ponto via WhatsApp para gestores
+> Automação de avisos de ponto via WhatsApp para gestores.
 
 ## Índice
 
