@@ -11,6 +11,7 @@ from app.processamento.log import finalizar_log
 from app.controller import processar_csv
 from app.processamento.mapear_gerencia import mapear_equipe
 from app.processamento.csv_reader import carregar_dados
+import logging
 
 api_bp = Blueprint('api', __name__)
 UPLOAD_FOLDER = 'uploads'
@@ -103,7 +104,7 @@ def enviar():
             "success": False,
             "log": [{"type": "error", "message": "❌ Erro interno no servidor. Verifique os logs."}]
         }), 500
-
+        
 
 @api_bp.route('/equipes', methods=['POST'])
 def obter_equipes():
