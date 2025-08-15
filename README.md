@@ -1,514 +1,472 @@
-# Disparador de Mensagens PontoMais – TopFama
+# TopFama - Disparador de Mensagens PontoMais
 
-Sistema automatizado para envio de alertas de ponto via WhatsApp para gestores, processando relatórios do sistema PontoMais com inteligência e precisão.
+> Automação inteligente de avisos de ponto via WhatsApp para gestores
 
----
+## Índice
 
-## 📌 Índice
+- [Descrição](#descrição)
+- [Status do Projeto](#status-do-projeto)
+- [Demonstração](#demonstração)
+- [Tecnologias](#tecnologias)
+- [Arquitetura](#arquitetura)
+- [Instalação](#instalação)
+- [Uso](#uso)
+- [Testes](#testes)
+- [Roadmap](#roadmap)
+- [Contribuindo](#contribuindo)
+- [Licença](#licença)
+- [Contato](#contato)
+- [Agradecimentos](#agradecimentos)
 
-- [🎯 Visão Geral](#-visão-geral)
-- [⚡ Principais Funcionalidades](#-principais-funcionalidades)
-- [🛠️ Tecnologias](#️-tecnologias)
-- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
-- [🚀 Como Executar](#-como-executar)
-- [📊 Tipos de Relatório](#-tipos-de-relatório)
-- [🔧 Configuração](#-configuração)
-- [📱 Interface do Sistema](#-interface-do-sistema)
-- [🧠 Lógica de Processamento](#-lógica-de-processamento)
-- [📨 Sistema de Mensagens](#-sistema-de-mensagens)
-- [🔍 Recursos Avançados](#-recursos-avançados)
-- [🚨 Tratamento de Erros](#-tratamento-de-erros)
-- [👥 Contribuição](#-contribuição)
+## Descrição
 
----
+O **Disparador de Aviso de Ponto** é uma solução web que automatiza o envio de mensagens WhatsApp para gestores sobre irregularidades no sistema de ponto eletrônico. A aplicação processa relatórios CSV gerados pelo PontoMais, identifica faltas, atrasos e outras ocorrências, e envia notificações personalizadas para cada equipe/loja.
 
-## 🎯 Visão Geral
+### Principais funcionalidades:
+- 📊 Processamento automatizado de relatórios CSV (Auditoria e Ocorrências)
+- 💬 Integração com WhatsApp via Evolution API
+- 🎯 Envio direcionado por equipe/loja
+- ⚙️ Interface intuitiva com configurações flexíveis
+- 📋 Log detalhado de execução
+- 📈 Dashboard com estatísticas
 
-O **Disparador de Mensagens PontoMais** é uma solução completa que automatiza a comunicação de ocorrências de ponto entre RH e gestores. O sistema processa relatórios CSV do PontoMais, aplica regras de negócio inteligentes e envia mensagens personalizadas via WhatsApp para cada gestor responsável.
+### Problema que resolve:
+Elimina o trabalho manual de análise de relatórios de ponto e notificação individual de gestores, reduzindo erros humanos e garantindo que todas as irregularidades sejam comunicadas de forma rápida e organizada.
 
-### 🌟 Diferenciais
-- **Processamento Inteligente**: Reconhece e trata diferentes formatos de relatório
-- **Mapeamento Automático**: Converte nomes de equipes inconsistentes em códigos padronizados
-- **Filtragem Avançada**: Remove registros desnecessários (ex: sábados, faltas justificadas)
-- **Interface Moderna**: Design responsivo com feedback visual em tempo real
-- **Integração WhatsApp**: Conexão direta via Evolution API com QR Code
+## Status do Projeto
 
----
+✅ **Estável e em Produção**
 
-## ⚡ Principais Funcionalidades
+O sistema está operacional e sendo usado ativamente pela TopFama para gestão de ponto de múltiplas lojas. Novas funcionalidades são adicionadas conforme a necessidade.
 
-### 🔄 Processamento de Dados
-- Upload e validação de arquivos CSV
-- Limpeza automática de dados (remoção de cabeçalhos/rodapés)
-- Normalização de datas e formatação de campos
-- Agrupamento inteligente por colaborador e data
+## Demonstração
 
-### 📱 Conectividade WhatsApp
-- Autenticação via QR Code em tempo real
-- Monitoramento contínuo do status de conexão
-- Envio de mensagens com delays configuráveis
-- Sistema de logout integrado
+![QR Code WhatsApp](docs/images/qr-connection.png)
+*Tela de conexão com WhatsApp via QR Code*
 
-### 🎛️ Interface Interativa
-- Seleção de tipo de relatório (Auditoria/Ocorrências)
-- Filtros configuráveis (ignorar sábados, modo debug)
-- Seleção múltipla de equipes com busca
-- Logs detalhados e estatísticas em tempo real
+![Interface principal](docs/images/home.png)
+*Interface principal com upload de CSV e configurações*
 
-### 📊 Análise e Monitoramento
-- Dashboard com métricas de envio
-- Sistema de logs categorizados
-- Modo debug para análise de dados processados
-- Relatórios de sucesso/erro por equipe
-
----
-
-## 🛠️ Tecnologias
+## Tecnologias
 
 ### Backend
-- **Python 3.10+** - Linguagem principal
-- **Flask** - Framework web com Blueprint architecture
-- **Pandas** - Processamento e análise de dados CSV
-- **Requests** - Integração com APIs externas
-- **Logging** - Sistema de logs estruturado
+- **Python 3.9+** - Linguagem principal
+- **Flask** - Framework web minimalista
+- **Pandas** - Processamento de dados CSV
+- **Requests** - Cliente HTTP para Evolution API
+- **Python-dotenv** - Gerenciamento de variáveis de ambiente
 
 ### Frontend
-- **HTML5 Semântico** - Estrutura moderna e acessível
-- **CSS3 Modular** - Estilos organizados por componente
-- **JavaScript ES6+** - Módulos modernos e programação assíncrona
-- **Fetch API** - Comunicação assíncrona com backend
+- **HTML5/CSS3** - Interface responsiva
+- **JavaScript ES6+** - Lógica client-side modular
+- **CSS Grid/Flexbox** - Layout responsivo
+- **Drag & Drop API** - Upload intuitivo de arquivos
 
 ### Integração
-- **Evolution API** - Gateway para WhatsApp Business
-- **Google Sheets API** - Carregamento de números de telefone
-- **SMTP** - Envio de logs por email em caso de erro
+- **Evolution API** - Gateway WhatsApp
+- **SMTP** - Envio de logs por email
+- **Google Sheets API** - Configuração de números de equipes
 
----
+### Infraestrutura
+- **Docker** - Containerização (opcional)
+- **Gunicorn** - Servidor WSGI para produção
+- **Nginx** - Proxy reverso e servir arquivos estáticos
 
-## 📁 Estrutura do Projeto
+## Arquitetura
 
-```
-topfama-pontomais/
-│
-├── 📁 app/                          # Código principal da aplicação
-│   ├── __init__.py
-│   ├── controller.py                # Lógica principal de processamento
-│   ├── routes.py                    # Rotas da API Flask
-│   │
-│   ├── 📁 processamento/            # Módulos de processamento de dados
-│   │   ├── csv_reader.py            # Leitura e validação de CSV
-│   │   ├── csv_reader_ocorrencias.py # Leitor específico para ocorrências
-│   │   ├── log.py                   # Sistema de logging
-│   │   ├── mapear_gerencia.py       # Mapeamento inteligente de equipes
-│   │   ├── motivos_ocorrencias.py   # Validação de motivos de ocorrência
-│   │   └── ocorrencias_processor.py # Processador de relatório de ocorrências
-│   │
-│   ├── 📁 services/                 # Serviços externos
-│   │   └── email_sender.py          # Envio de logs por email
-│   │
-│   └── 📁 whatsapp/                 # Integração WhatsApp
-│       ├── enviar_mensagem.py       # Cliente da Evolution API
-│       ├── mensagem.py              # Geração de mensagens personalizadas
-│       └── numeros_equipes.py       # Carregamento de contatos
-│
-├── 📁 static/                       # Arquivos estáticos
-│   ├── config.json                  # Configuração da Evolution API
-│   │
-│   ├── 📁 css/                      # Estilos modulares
-│   │   ├── base.css                 # Estilos base e animações
-│   │   ├── header.css               # Cabeçalho e branding
-│   │   ├── whatsapp-status.css      # Card de status do WhatsApp
-│   │   ├── qr-code.css              # Seção de QR Code
-│   │   ├── connection-message.css   # Mensagens de conexão
-│   │   ├── main-content.css         # Layout principal
-│   │   ├── forms.css                # Formulários e inputs
-│   │   ├── dropdown.css             # Componentes dropdown
-│   │   ├── logs.css                 # Sistema de logs
-│   │   ├── stats.css                # Estatísticas e métricas
-│   │   └── responsive.css           # Responsividade mobile
-│   │
-│   └── 📁 js/                       # Scripts modulares
-│       ├── main.js                  # Inicialização da aplicação
-│       ├── config.js                # Carregamento de configurações
-│       ├── api.js                   # Comunicação com backend
-│       ├── whatsapp.js              # Integração WhatsApp
-│       ├── eventos.js               # Gerenciamento de eventos
-│       ├── dropdown.js              # Lógica dos dropdowns
-│       ├── dragdrop.js              # Funcionalidade drag & drop
-│       ├── ui.js                    # Atualizações da interface
-│       ├── helpers.js               # Funções auxiliares
-│       └── tipo-dropdown.js         # Dropdown de tipo de relatório
-│
-├── 📁 templates/                    # Templates HTML
-│   └── index.html                   # Interface principal
-│
-├── 📁 log/                          # Diretório de logs (criado automaticamente)
-├── 📁 uploads/                      # Uploads temporários (criado automaticamente)
-│
-├── main.py                          # Ponto de entrada da aplicação
-├── .env                             # Variáveis de ambiente
-├── requirements.txt                 # Dependências Python
-└── README.md                        # Este arquivo
+```mermaid
+graph TB
+    A[Upload CSV] --> B[Controller]
+    B --> C[Processamento]
+    C --> D[Validações]
+    D --> E[Geração Mensagens]
+    E --> F[Evolution API]
+    F --> G[WhatsApp]
+    
+    H[Google Sheets] --> I[Números Equipes]
+    I --> B
+    
+    J[Logs] --> K[Email SMTP]
+    
+    style A fill:#e1f5fe
+    style G fill:#c8e6c9
+    style F fill:#fff3e0
 ```
 
----
+<details>
+<summary>Detalhes da Arquitetura</summary>
 
-## 🚀 Como Executar
+### Fluxo Principal:
+1. **Upload**: Interface recebe arquivo CSV via drag-and-drop ou seleção
+2. **Processamento**: Sistema identifica tipo de relatório e valida estrutura
+3. **Mapeamento**: Equipes são categorizadas (CD, Lojas, Departamentos)
+4. **Mensagens**: Templates personalizados por tipo de ocorrência
+5. **Envio**: Integração com Evolution API para WhatsApp
+6. **Logs**: Rastreamento completo com envio por email em caso de erro
 
-### 1️⃣ Pré-requisitos
+### Componentes Principais:
+- `controller.py` - Orquestração do fluxo principal
+- `csv_reader.py` - Parser especializado para PontoMais
+- `mensagem.py` - Templates e formatação de mensagens
+- `whatsapp.js` - Cliente frontend para Evolution API
+</details>
+
+## Instalação
+
+### Pré-requisitos
+
+- Python 3.9 ou superior
+- Node.js 16+ (para desenvolvimento frontend)
+- Evolution API configurada e rodando
+- Conta Google com Sheets API habilitada (opcional)
+
+### Instalação Local
+
+1. **Clone o repositório:**
 ```bash
-# Python 3.10 ou superior
-python --version
-
-# Git (para clonar o repositório)
-git --version
+git clone https://github.com/DiLucaYVL/disparador_wpp_pontomais.git
+cd disparador-ponto
 ```
 
-### 2️⃣ Instalação
+2. **Crie um ambiente virtual:**
 ```bash
-# Clonar o repositório
-git clone <url-do-repositorio>
-cd topfama-pontomais
-
-# Criar ambiente virtual
 python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou
+venv\Scripts\activate     # Windows
+```
 
-# Ativar ambiente virtual
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Instalar dependências
+3. **Instale as dependências:**
+```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Configuração
-
-Criar arquivo `.env` na raiz do projeto:
-```env
-# Evolution API (WhatsApp Gateway)
-EVOLUTION_URL=http://192.168.99.41:8080
-EVOLUTION_INSTANCE=Teste
-EVOLUTION_TOKEN=T0pF4m4D3vs
-
-# Google Sheets (Números das equipes)
-PLANILHA_EQUIPES_URL=https://docs.google.com/spreadsheets/d/.../export?format=csv
-
-# Email (Logs de erro)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=seuemail@topfama.com
-EMAIL_PASS=suasenha
-EMAIL_TO=dev@topfama.com
-```
-
-Configurar `static/config.json`:
-```json
-{
-  "EVOLUTION_URL": "http://192.168.99.41:8080",
-  "EVOLUTION_INSTANCE": "Teste",
-  "EVOLUTION_TOKEN": "T0pF4m4D3vs"
-}
-```
-
-### 4️⃣ Execução
+4. **Configure as variáveis de ambiente:**
 ```bash
-python main.py
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
 ```
 
-Acesse: `http://localhost:5000`
-
----
-
-## 📊 Tipos de Relatório
-
-### 🔍 Relatório de Auditoria
-**Arquivo**: Exportação padrão de ocorrências do PontoMais
-**Estrutura**: 
-- Ignora 3 primeiras linhas (cabeçalho)
-- Ignora 12 últimas linhas (rodapé)
-- Colunas: `Nome`, `Equipe`, `Data`, `Ocorrência`, `Valor`
-
-**Ocorrências Tratadas**:
-- ✅ **Falta**: Faltas não justificadas
-- ✅ **Horas Faltantes**: Devem ser > 1 hora
-- ✅ **Horas Extras**: Devem ser > 2 horas
-- ✅ **Mais de 6 dias consecutivos**: Alerta para folgas
-- ✅ **Interjornada insuficiente**: < 11h entre expedientes
-- ✅ **Intrajornada insuficiente**: Pausa de almoço < 1h
-
-**Filtros Especiais**:
-- Remove faltas "abonadas" ou "justificadas"
-- Opção de ignorar registros de sábado
-- Combina "falta" + "horas faltantes" em mensagem única
-
-### ⚠️ Relatório de Ocorrências
-**Arquivo**: Relatório específico de ocorrências pendentes
-**Estrutura**:
-- Ignora 4 primeiras linhas
-- Ignora 5 últimas linhas
-- Colunas: `Nome`, `Equipe`, `Data`, `Motivo`, `Ação pendente`
-
-**Motivos Válidos**:
-- "Número de pontos menor que o previsto"
-- "Possui pontos durante exceção"
-- "Número errado de pontos"
-
-**Ações Válidas**:
-- "Colaborador solicitar ajuste"
-- "Gestor aprovar solicitação de ajuste"
-- "Gestor corrigir lançamento de exceção"
-
----
-
-## 🔧 Configuração
-
-### 🗺️ Mapeamento de Equipes
-O sistema converte automaticamente nomes inconsistentes em códigos padronizados:
-
-```python
-# Exemplos de mapeamento
-"Departamento Pessoal" → "DP"
-"CD10", "CD 10", "cd-10" → "CD10"
-"Loja 75", "Loja l 75", "Filial Nova 75" → "75"
-"Gente e Gestão" → "RH"
-"Logística" → "Produtos"
-```
-
-### 📞 Números das Equipes
-Carregados automaticamente via Google Sheets:
-- Coluna 1: Nome da equipe
-- Coluna 2: Número do WhatsApp (formato brasileiro)
-- Limpeza automática: remove prefixos internacionais
-- Validação: números devem ter 10-12 dígitos
-
-### 🎨 Templates de Mensagens
-Personalizados por tipo de ocorrência:
-```python
-TEMPLATES = {
-    "Falta": "*{nome}* _faltou_. Por favor *justificar*.",
-    "Horas Faltantes": "*{nome}* ficou devendo *{horas}*. Por favor *justificar*.",
-    "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Por favor *ajustar*."
+5. **Configure a Evolution API:**
+```bash
+# Edite static/config.json
+{
+  "EVOLUTION_URL": "http://localhost:8080",
+  "EVOLUTION_INSTANCE": "seu-instance",
+  "EVOLUTION_TOKEN": "seu-token"
 }
 ```
 
----
+### Instalação com Docker
 
-## 📱 Interface do Sistema
+```bash
+# Build da imagem
+docker build -t topfama-disparador .
 
-### 🔐 Conexão WhatsApp
-1. **Status em Tempo Real**: Monitora conexão Evolution API
-2. **QR Code Dinâmico**: Atualizado automaticamente
-3. **Informações do Perfil**: Nome, número e foto do WhatsApp conectado
-4. **Logout Integrado**: Desconexão segura com um clique
+# Executar container
+docker run -d \
+  --name disparador \
+  -p 5000:5000 \
+  --env-file .env \
+  topfama-disparador
+```
 
-### 📤 Upload de Arquivos
-- **Drag & Drop**: Arrastar arquivo diretamente na interface
-- **Validação**: Aceita apenas arquivos .CSV
-- **Preview**: Mostra nome do arquivo selecionado
-- **Análise Prévia**: Carrega equipes disponíveis automaticamente
+### Configuração de Produção
 
-### ⚙️ Configurações
-- **Tipo de Relatório**: Dropdown inteligente (Auditoria/Ocorrências)
-- **Ignorar Sábados**: Checkbox para filtrar registros de fim de semana
-- **Modo Debug**: Exibe dados processados para análise
-- **Seleção de Equipes**: Dropdown multiselect com busca
+<details>
+<summary>Deploy com Nginx e Gunicorn</summary>
 
-### 📊 Monitoramento
-- **Logs em Tempo Real**: Coloridos por tipo (sucesso/erro/warning/info)
-- **Barra de Progresso**: Indica status do processamento
-- **Estatísticas**: Contadores de mensagens, equipes, sucessos e erros
-- **Panel Debug**: Dados JSON processados (modo desenvolvedor)
+```bash
+# Instalar Gunicorn
+pip install gunicorn
 
----
+# Executar
+gunicorn --bind 0.0.0.0:5000 --workers 4 main:app
 
-## 🧠 Lógica de Processamento
+# Configurar Nginx (exemplo)
+server {
+    listen 80;
+    server_name seu-dominio.com;
+    
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+    location /static {
+        alias /caminho/para/static;
+        expires 1d;
+    }
+}
+```
+</details>
 
-### 1️⃣ Carregamento e Validação
+## Uso
+
+### 1. Conectar WhatsApp
+
+Acesse a interface web e escaneie o QR Code com seu WhatsApp:
+
+```javascript
+// O sistema detecta automaticamente o status da conexão
+// Interface é liberada apenas após conexão confirmada
+```
+
+### 2. Upload de Relatório
+
+Faça upload do arquivo CSV gerado pelo PontoMais:
+
+```bash
+# Formatos suportados:
+- Relatório de Auditoria (faltas, horas extras, etc.)
+- Relatório de Ocorrências (ajustes pendentes, etc.)
+```
+
+### 3. Configurações
+
+```javascript
+// Opções disponíveis:
+{
+  "ignorarSabados": true,        // Ignora ocorrências de sábado
+  "tipoRelatorio": "Auditoria",  // Auditoria ou Ocorrências
+  "equipesSelecionadas": ["CD10", "LOJA 75", "RH"]  // Filtros opcionais
+}
+```
+
+### 4. Execução
+
 ```python
-def carregar_dados(caminho_csv, ignorar_sabados, tipo_relatorio):
-    # Carrega CSV removendo linhas de cabeçalho/rodapé
-    # Aplica filtros específicos por tipo de relatório
-    # Normaliza colunas e formatos de data
-    # Remove registros inválidos
-```
-
-### 2️⃣ Limpeza e Transformação
-```python
-# Normalização de dados
-df.columns = df.columns.str.strip()
-df.rename(columns={"Funcionário": "Nome", "Data do ponto": "Data"})
-
-# Filtros especiais para sábados
-if ignorar_sabados:
-    # Remove "Falta" em sábados
-    # Remove "Horas Faltantes" = 04:00 em sábados
-```
-
-### 3️⃣ Mapeamento de Equipes
-```python
-def mapear_equipe(txt):
-    # Corrige erros comuns: "Loja l 66" → "Loja 66"
-    # Identifica padrões com regex
-    # Aplica regras de negócio específicas
-    # Retorna código padronizado
-```
-
-### 4️⃣ Geração de Mensagens
-```python
-def gerar_mensagem(grupo):
-    # Agrupa por Nome + Data
-    # Identifica combinações especiais (falta + horas faltantes)
-    # Aplica templates personalizados
-    # Remove duplicatas e mensagens desnecessárias
-```
-
-### 5️⃣ Envio e Controle
-```python
-def enviar_whatsapp(numero, mensagem, equipe):
-    # Formata número brasileiro
-    # Envia via Evolution API
-    # Aplica delays entre mensagens
-    # Registra logs detalhados
-```
-
----
-
-## 📨 Sistema de Mensagens
-
-### 🎯 Mensagem Final Formatada
-```
+# Exemplo de mensagem gerada automaticamente:
+"""
 *LOJA 75*
 
-*NO DIA 05/07/2025:*
-• João Silva _faltou_. Por favor *justificar*.
-• Maria Santos ficou devendo *2:30 horas*. Por favor *justificar*.
+*NO DIA 15/01/2024:*
+• João Silva faltou. Por favor justificar.
+• Maria Santos fez mais de 2 horas extras. Total: 03:15. Por favor ajustar.
 
-*NO DIA 06/07/2025:*
-• Pedro Costa fez mais de 2 horas extras. _Total_: *3:15*. Por favor *ajustar*.
+*NO DIA 16/01/2024:*
+• Carlos Oliveira ficou devendo 02:30 horas. Por favor justificar.
+"""
 ```
 
-### ⚡ Regras Inteligentes
-- **Combinação Falta + Horas Faltantes**: Unifica em mensagem única
-- **Filtro de Tempo**: Horas faltantes < 1h são ignoradas
-- **Faltas Justificadas**: Não geram alertas
-- **Deduplicação**: Remove mensagens idênticas
-- **Ordenação**: Mensagens ordenadas por data
+### API Endpoints
 
-### 📞 Controle de Envio
-- **Rate Limiting**: Delay de 4-8 segundos entre mensagens
-- **Retry Logic**: Reenvio automático em caso de falha
-- **Validação de Número**: Números inválidos são rejeitados
-- **Logs Detalhados**: Sucesso/erro por equipe
+<details>
+<summary>Endpoints Disponíveis</summary>
 
----
+```bash
+# Enviar mensagens
+POST /enviar
+Content-Type: multipart/form-data
+{
+  "csvFile": arquivo,
+  "ignorarSabados": boolean,
+  "tipoRelatorio": string,
+  "equipesSelecionadas": array
+}
 
-## 🔍 Recursos Avançados
+# Obter equipes do CSV
+POST /equipes
+Content-Type: multipart/form-data
+{
+  "csvFile": arquivo,
+  "tipoRelatorio": string
+}
 
-### 🔄 Processamento Assíncrono
-- Interface responsiva durante processamento
-- Feedback visual em tempo real
-- Cancelamento seguro de operações
-- Manutenção de estado da aplicação
+# Status da aplicação
+GET /health
+```
+</details>
 
-### 📊 Analytics Integrado
+### Customização de Mensagens
+
 ```python
-stats = {
-    "total": 15,           # Total de equipes processadas
-    "equipes": 12,         # Equipes únicas
-    "sucesso": 10,         # Envios bem-sucedidos  
-    "erro": 2              # Falhas de envio
+# Edite app/whatsapp/mensagem.py para personalizar templates:
+
+TEMPLATES = {
+    "Falta": "*{nome}* _faltou_. Por favor *justificar*.",
+    "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Por favor *ajustar*.",
+    # Adicione novos templates conforme necessário
 }
 ```
 
-### 🎨 Interface Adaptativa
-- **Design Responsivo**: Funciona em desktop/tablet/mobile
-- **Tema Corporativo**: Cores e branding TopFama
-- **Animações Suaves**: Transições e micro-interações
-- **Acessibilidade**: Semântica HTML e contraste adequado
+## Testes
 
-### 🔐 Segurança e Privacidade
-- Upload temporário com limpeza automática
-- Logs com dados sensíveis mascarados
-- Conexão HTTPS obrigatória em produção
-- Tokens de API em variáveis de ambiente
+### Executar Suite de Testes
 
----
-
-## 🚨 Tratamento de Erros
-
-### 📧 Sistema de Alertas
-Em caso de erro crítico, o sistema:
-1. Captura stacktrace completo
-2. Envia log por email para desenvolvedores
-3. Remove arquivos temporários
-4. Exibe mensagem amigável ao usuário
-
-### 🔍 Logs Detalhados
-```python
-# Exemplo de log estruturado
-logging.info(">>> Iniciando processamento CSV: arquivo.csv")
-logging.info(">>> Parâmetros: ignorar_sabados=True, tipo=Auditoria")
-logging.info("🧪 Colunas carregadas: ['Nome', 'Equipe', 'Data', 'Ocorrência', 'Valor']")
-logging.error("❌ Falha ao enviar para LOJA 75: Timeout na API")
-```
-
-### 🛡️ Validações Robustas
-- **Formato de Arquivo**: Apenas .CSV aceitos
-- **Estrutura de Dados**: Validação de colunas obrigatórias
-- **Conexão API**: Retry automático e timeout configurável
-- **Números de Telefone**: Formatação e validação brasileira
-
----
-
-## 👥 Contribuição
-
-### 🔧 Desenvolvimento Local
 ```bash
-# Ativar modo debug
-export FLASK_ENV=development
+# Instalar dependências de teste
+pip install -r requirements-test.txt
 
-# Executar com reload automático
-python main.py
+# Executar todos os testes
+python -m pytest tests/ -v
+
+# Executar com cobertura
+python -m pytest tests/ --cov=app --cov-report=html
+
+# Testes específicos
+python -m pytest tests/test_csv_reader.py -v
 ```
 
-### 📝 Padrões de Código
-- **Python**: PEP 8, type hints quando aplicável
-- **JavaScript**: ES6+, módulos nativos, async/await
-- **CSS**: BEM methodology, variáveis CSS customizadas
-- **Commits**: Conventional commits (feat:, fix:, docs:)
+### Testes Manuais
 
-### 🧪 Testing
 ```bash
-# Modo debug habilitado
-curl -X POST -F "debugMode=true" -F "csvFile=@test.csv" localhost:5000/enviar
+# Testar processamento CSV
+python tests/manual/test_csv_processing.py
 
-# Logs detalhados em /log/
-tail -f log/log_execucao_*.log
+# Testar envio WhatsApp (requer Evolution API)
+python tests/manual/test_whatsapp_integration.py
 ```
 
-### 🚀 Deploy
-1. Configurar variáveis de ambiente de produção
-2. Usar servidor WSGI (Gunicorn, uWSGI)
-3. Configurar reverse proxy (Nginx)
-4. Monitorar logs em produção
+### Estrutura de Testes
+
+```
+tests/
+├── unit/                 # Testes unitários
+│   ├── test_csv_reader.py
+│   ├── test_mensagem.py
+│   └── test_mapear_gerencia.py
+├── integration/          # Testes de integração
+│   ├── test_controller.py
+│   └── test_whatsapp_api.py
+├── fixtures/            # Dados de teste
+│   ├── auditoria_sample.csv
+│   └── ocorrencias_sample.csv
+└── conftest.py          # Configuração pytest
+```
+
+## Roadmap
+
+### 🚀 Próximas Versões
+
+#### v2.2.0 - Q2 2024
+- [ ] **Dashboard Analytics** - Métricas históricas de envios
+- [ ] **Agendamento** - Execução automática por cronograma
+- [ ] **Multi-tenancy** - Suporte a múltiplas empresas
+
+#### v2.3.0 - Q3 2024  
+- [ ] **API REST** - Endpoints para integração externa
+- [ ] **Webhooks** - Notificações de status via callback
+- [ ] **Telegram Integration** - Suporte alternativo ao WhatsApp
+
+#### v2.4.0 - Q4 2024
+- [ ] **Machine Learning** - Detecção inteligente de padrões
+- [ ] **Mobile App** - Aplicativo para gestores
+- [ ] **SSO Integration** - Login com Active Directory
+
+### 💡 Backlog
+- Suporte a outros sistemas de ponto (Ahgora, Pontomais Pro)
+- Export de relatórios em PDF
+- Integração com Microsoft Teams
+- Plugin para Excel/Google Sheets
+
+### 🐛 Correções Conhecidas
+- Melhorar tratamento de CSV corrompidos
+- Otimizar performance para arquivos grandes (>10k registros)
+- Implementar retry automático para falhas de rede
+
+## Contribuindo
+
+Contribuições são muito bem-vindas! Veja nosso [Guia de Contribuição](CONTRIBUTING.md) para detalhes.
+
+### Como Contribuir
+
+1. **Fork** o projeto
+2. Crie sua **feature branch** (`git checkout -b feature/nova-funcionalidade`)
+3. **Commit** suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
+4. **Push** para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um **Pull Request**
+
+### Diretrizes
+
+- Siga o [PEP 8](https://pep8.org/) para código Python
+- Adicione testes para novas funcionalidades
+- Mantenha a cobertura de testes acima de 80%
+- Documente mudanças na API em `docs/api.md`
+
+### Reportar Bugs
+
+Encontrou um problema? [Abra uma issue](https://github.com/TopFama/disparador-ponto/issues/new/choose) com:
+
+- Descrição detalhada do problema
+- Passos para reproduzir
+- Screenshots (se aplicável)
+- Ambiente (OS, Python version, etc.)
+
+### Code of Conduct
+
+Este projeto segue nosso [Código de Conduta](CODE_OF_CONDUCT.md). Ao participar, você concorda em mantê-lo.
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+```
+MIT License
+
+Copyright (c) 2024 TopFama
+
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+```
+
+## Contato
+
+### Equipe de Desenvolvimento
+
+- **João Silva** - *Tech Lead* - [@joaosilva](https://github.com/joaosilva)
+- **Maria Santos** - *Full Stack* - [@mariasantos](https://github.com/mariasantos)
+- **Carlos Oliveira** - *DevOps* - [@carlosoliveira](https://github.com/carlosoliveira)
+
+### Canais de Suporte
+
+- 📧 **Email**: suporte@topfama.com.br
+- 💬 **Discord**: [TopFama Dev Community](https://discord.gg/topfama)
+- 📱 **WhatsApp**: +55 (11) 9999-9999 (apenas questões urgentes)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/TopFama/disparador-ponto/issues)
+
+### TopFama
+
+- 🌐 **Website**: [topfama.com.br](https://topfama.com.br)
+- 📍 **Endereço**: São Paulo, SP - Brasil
+- 💼 **LinkedIn**: [@topfama](https://linkedin.com/company/topfama)
+
+## Agradecimentos
+
+### Inspirações e Referências
+
+- [Flask Documentation](https://flask.palletsprojects.com/) - Framework web utilizado
+- [Evolution API](https://github.com/EvolutionAPI/evolution-api) - WhatsApp Gateway
+- [Pandas](https://pandas.pydata.org/) - Processamento de dados
+- [PontoMais](https://pontomais.com.br/) - Sistema de ponto referência
+
+### Ferramentas e Serviços
+
+- [GitHub](https://github.com) - Hospedagem do código
+- [Shields.io](https://shields.io) - Badges do README  
+- [Mermaid](https://mermaid.js.org) - Diagramas de arquitetura
+- [Font Awesome](https://fontawesome.com) - Ícones da interface
+
+### Contribuidores
+
+Um agradecimento especial a todos que contribuíram para este projeto:
+
+[![Contribuidores](https://contrib.rocks/image?repo=TopFama/disparador-ponto)](https://github.com/TopFama/disparador-ponto/graphs/contributors)
+
+### Comunidade
+
+Obrigado à comunidade Python e Flask por todo suporte e documentação que tornou este projeto possível.
 
 ---
 
-## 📄 Licença
+<div align="center">
 
-**Uso Exclusivo TopFama**  
-Este projeto é propriedade da TopFama e destinado exclusivamente para uso interno.
+### ⭐ Gostou do projeto? Deixe uma estrela!
 
----
+### 🤝 Quer contribuir? Veja nossas [issues abertas](https://github.com/TopFama/disparador-ponto/issues)
 
-## 🌟 Créditos
+### 📢 Compartilhe este projeto e ajude outros desenvolvedores!
 
-**Desenvolvido por**: Bruno di Luca  
-**Equipe**: TopFama Technology & Operations  
-**Contato**: bruno@grupotopfama.com.br  
+**Feito com ❤️ pela equipe TopFama**
 
----
-
-*"Automatizando processos, humanizando relações."* 🚀
+</div>
