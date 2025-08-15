@@ -1,220 +1,514 @@
+# Disparador de Mensagens PontoMais – TopFama
 
-# 🚀 Disparador de Mensagens PontoMais – TopFama
-
-Automatize o envio de **alertas de ponto** via WhatsApp para gestores da TopFama, com base em registros extraídos do sistema PontoMais. Desenvolvido para reduzir esforços manuais, garantir agilidade na comunicação e manter o compliance com a jornada de trabalho.
+Sistema automatizado para envio de alertas de ponto via WhatsApp para gestores, processando relatórios do sistema PontoMais com inteligência e precisão.
 
 ---
 
 ## 📌 Índice
 
-- [📌 Índice](#-índice)
-- [🧠 Visão Geral](#-visão-geral)
-- [🖼️ Interface Visual](#️-interface-visual)
-- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [🎯 Visão Geral](#-visão-geral)
+- [⚡ Principais Funcionalidades](#-principais-funcionalidades)
+- [🛠️ Tecnologias](#️-tecnologias)
 - [📁 Estrutura do Projeto](#-estrutura-do-projeto)
-- [⚙️ Como Rodar o Projeto](#️-como-rodar-o-projeto)
-- [📄 Sobre o Arquivo CSV do PontoMais](#-sobre-o-arquivo-csv-do-pontomais)
-- [✅ Funcionalidades em Destaque](#-funcionalidades-em-destaque)
-- [🧑‍💻 Contribuição Interna](#-contribuição-interna)
-- [📄 Licença e Privacidade](#-licença-e-privacidade)
-- [🌟 Mensagem Final](#-mensagem-final)
+- [🚀 Como Executar](#-como-executar)
+- [📊 Tipos de Relatório](#-tipos-de-relatório)
+- [🔧 Configuração](#-configuração)
+- [📱 Interface do Sistema](#-interface-do-sistema)
+- [🧠 Lógica de Processamento](#-lógica-de-processamento)
+- [📨 Sistema de Mensagens](#-sistema-de-mensagens)
+- [🔍 Recursos Avançados](#-recursos-avançados)
+- [🚨 Tratamento de Erros](#-tratamento-de-erros)
+- [👥 Contribuição](#-contribuição)
 
 ---
 
-## 🧠 Visão Geral
+## 🎯 Visão Geral
 
-Este sistema realiza:
+O **Disparador de Mensagens PontoMais** é uma solução completa que automatiza a comunicação de ocorrências de ponto entre RH e gestores. O sistema processa relatórios CSV do PontoMais, aplica regras de negócio inteligentes e envia mensagens personalizadas via WhatsApp para cada gestor responsável.
 
-- Upload e processamento inteligente de planilhas do PontoMais
-- Agrupamento por colaborador e data com múltiplas ocorrências
-- Mapeamento inteligente de equipes com nomes inconsistentes
-- Geração de mensagens personalizadas conforme tipo de ocorrência
-- Envio automático via API WAHA (gateway de WhatsApp)
-- Interface intuitiva com feedback visual: QR Code, logs, progresso e estatísticas
-
-🎯 **Objetivo:** Garantir que cada gestor receba os alertas de ocorrências da sua equipe de forma automatizada, confiável e personalizável.
+### 🌟 Diferenciais
+- **Processamento Inteligente**: Reconhece e trata diferentes formatos de relatório
+- **Mapeamento Automático**: Converte nomes de equipes inconsistentes em códigos padronizados
+- **Filtragem Avançada**: Remove registros desnecessários (ex: sábados, faltas justificadas)
+- **Interface Moderna**: Design responsivo com feedback visual em tempo real
+- **Integração WhatsApp**: Conexão direta via Evolution API com QR Code
 
 ---
 
-## 🖼️ Interface Visual
+## ⚡ Principais Funcionalidades
 
-| QR Code de Conexão | Interface após conexão |
-|--------------------|------------------------|
-| ![](./print_qr.png) | ![](./print_main.png) |
+### 🔄 Processamento de Dados
+- Upload e validação de arquivos CSV
+- Limpeza automática de dados (remoção de cabeçalhos/rodapés)
+- Normalização de datas e formatação de campos
+- Agrupamento inteligente por colaborador e data
+
+### 📱 Conectividade WhatsApp
+- Autenticação via QR Code em tempo real
+- Monitoramento contínuo do status de conexão
+- Envio de mensagens com delays configuráveis
+- Sistema de logout integrado
+
+### 🎛️ Interface Interativa
+- Seleção de tipo de relatório (Auditoria/Ocorrências)
+- Filtros configuráveis (ignorar sábados, modo debug)
+- Seleção múltipla de equipes com busca
+- Logs detalhados e estatísticas em tempo real
+
+### 📊 Análise e Monitoramento
+- Dashboard com métricas de envio
+- Sistema de logs categorizados
+- Modo debug para análise de dados processados
+- Relatórios de sucesso/erro por equipe
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
-### 🔹 Backend
-- Python 3.10+
-- Flask
-- Pandas
-- WAHA API (`requests`)
-- Organização em Blueprints e módulos
+### Backend
+- **Python 3.10+** - Linguagem principal
+- **Flask** - Framework web com Blueprint architecture
+- **Pandas** - Processamento e análise de dados CSV
+- **Requests** - Integração com APIs externas
+- **Logging** - Sistema de logs estruturado
 
-### 🔹 Frontend
-- HTML5 + CSS3 modular (por componente)
-- JavaScript moderno (ES Modules)
-- UI reativa e responsiva
-- Fetch assíncrono e manipulação dinâmica do DOM
+### Frontend
+- **HTML5 Semântico** - Estrutura moderna e acessível
+- **CSS3 Modular** - Estilos organizados por componente
+- **JavaScript ES6+** - Módulos modernos e programação assíncrona
+- **Fetch API** - Comunicação assíncrona com backend
+
+### Integração
+- **Evolution API** - Gateway para WhatsApp Business
+- **Google Sheets API** - Carregamento de números de telefone
+- **SMTP** - Envio de logs por email em caso de erro
 
 ---
 
 ## 📁 Estrutura do Projeto
 
 ```
-├── app/
-│   ├── app.py
-│   ├── routes.py
-│   ├── controller.py
-│   ├── processamento/
-│   │   ├── csv_reader.py
-│   │   ├── log.py
-│   │   └── mapear_gerencia.py
-│   └── whatsapp/
-│       ├── mensagem.py
-│       ├── enviar_mensagem.py
-│       └── numeros_equipes.py
+topfama-pontomais/
 │
-├── static
-│   ├── css
-│   │   ├── base.css
-│   │   ├── connection-message.css
-│   │   ├── dropdown.css
-│   │   ├── forms.css
-│   │   ├── header.css
-│   │   ├── logs.css
-│   │   ├── main-content.css
-│   │   ├── qr-code.css
-│   │   ├── responsive.css
-│   │   ├── stats.css
-│   │   └── whatsapp-status.css
-│   └── js
-│       ├── api.js
-│       ├── dragdrop.js
-│       ├── dropdown.js
-│       ├── eventos.js
-│       ├── helpers.js
-│       ├── main.js
-│       ├── ui.js
-│       └── whatsapp.js
-├── templates
-│   └── index.html
+├── 📁 app/                          # Código principal da aplicação
+│   ├── __init__.py
+│   ├── controller.py                # Lógica principal de processamento
+│   ├── routes.py                    # Rotas da API Flask
+│   │
+│   ├── 📁 processamento/            # Módulos de processamento de dados
+│   │   ├── csv_reader.py            # Leitura e validação de CSV
+│   │   ├── csv_reader_ocorrencias.py # Leitor específico para ocorrências
+│   │   ├── log.py                   # Sistema de logging
+│   │   ├── mapear_gerencia.py       # Mapeamento inteligente de equipes
+│   │   ├── motivos_ocorrencias.py   # Validação de motivos de ocorrência
+│   │   └── ocorrencias_processor.py # Processador de relatório de ocorrências
+│   │
+│   ├── 📁 services/                 # Serviços externos
+│   │   └── email_sender.py          # Envio de logs por email
+│   │
+│   └── 📁 whatsapp/                 # Integração WhatsApp
+│       ├── enviar_mensagem.py       # Cliente da Evolution API
+│       ├── mensagem.py              # Geração de mensagens personalizadas
+│       └── numeros_equipes.py       # Carregamento de contatos
 │
-├── log/
-└── .env
-
+├── 📁 static/                       # Arquivos estáticos
+│   ├── config.json                  # Configuração da Evolution API
+│   │
+│   ├── 📁 css/                      # Estilos modulares
+│   │   ├── base.css                 # Estilos base e animações
+│   │   ├── header.css               # Cabeçalho e branding
+│   │   ├── whatsapp-status.css      # Card de status do WhatsApp
+│   │   ├── qr-code.css              # Seção de QR Code
+│   │   ├── connection-message.css   # Mensagens de conexão
+│   │   ├── main-content.css         # Layout principal
+│   │   ├── forms.css                # Formulários e inputs
+│   │   ├── dropdown.css             # Componentes dropdown
+│   │   ├── logs.css                 # Sistema de logs
+│   │   ├── stats.css                # Estatísticas e métricas
+│   │   └── responsive.css           # Responsividade mobile
+│   │
+│   └── 📁 js/                       # Scripts modulares
+│       ├── main.js                  # Inicialização da aplicação
+│       ├── config.js                # Carregamento de configurações
+│       ├── api.js                   # Comunicação com backend
+│       ├── whatsapp.js              # Integração WhatsApp
+│       ├── eventos.js               # Gerenciamento de eventos
+│       ├── dropdown.js              # Lógica dos dropdowns
+│       ├── dragdrop.js              # Funcionalidade drag & drop
+│       ├── ui.js                    # Atualizações da interface
+│       ├── helpers.js               # Funções auxiliares
+│       └── tipo-dropdown.js         # Dropdown de tipo de relatório
+│
+├── 📁 templates/                    # Templates HTML
+│   └── index.html                   # Interface principal
+│
+├── 📁 log/                          # Diretório de logs (criado automaticamente)
+├── 📁 uploads/                      # Uploads temporários (criado automaticamente)
+│
+├── main.py                          # Ponto de entrada da aplicação
+├── .env                             # Variáveis de ambiente
+├── requirements.txt                 # Dependências Python
+└── README.md                        # Este arquivo
 ```
 
 ---
 
-## ⚙️ Como Rodar o Projeto
+## 🚀 Como Executar
 
-### 1. Clonar o repositório
-
+### 1️⃣ Pré-requisitos
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+# Python 3.10 ou superior
+python --version
+
+# Git (para clonar o repositório)
+git --version
 ```
 
-### 2. Criar o ambiente virtual
-
+### 2️⃣ Instalação
 ```bash
+# Clonar o repositório
+git clone <url-do-repositorio>
+cd topfama-pontomais
+
+# Criar ambiente virtual
 python -m venv venv
-source venv/bin/activate  # ou venv\Scripts\activate no Windows
-```
 
-### 3. Instalar as dependências
+# Ativar ambiente virtual
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
 
-```bash
+# Instalar dependências
 pip install -r requirements.txt
 ```
 
-### 4. Criar o arquivo `.env`
+### 3️⃣ Configuração
 
+Criar arquivo `.env` na raiz do projeto:
 ```env
-WAHA_URL=http://endereço-da-api-waha.com
-WAHA_SESSION=nome_da_sessão
-PLANILHA_EQUIPES_URL=https://docs.google.com/spreadsheets/...
+# Evolution API (WhatsApp Gateway)
+EVOLUTION_URL=http://192.168.99.41:8080
+EVOLUTION_INSTANCE=Teste
+EVOLUTION_TOKEN=T0pF4m4D3vs
+
+# Google Sheets (Números das equipes)
+PLANILHA_EQUIPES_URL=https://docs.google.com/spreadsheets/d/.../export?format=csv
+
+# Email (Logs de erro)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=seuemail@topfama.com
+EMAIL_PASS=suasenha
+EMAIL_TO=dev@topfama.com
 ```
 
-### 5. Iniciar o servidor
+Configurar `static/config.json`:
+```json
+{
+  "EVOLUTION_URL": "http://192.168.99.41:8080",
+  "EVOLUTION_INSTANCE": "Teste",
+  "EVOLUTION_TOKEN": "T0pF4m4D3vs"
+}
+```
 
+### 4️⃣ Execução
 ```bash
-python app.py
+python main.py
+```
+
+Acesse: `http://localhost:5000`
+
+---
+
+## 📊 Tipos de Relatório
+
+### 🔍 Relatório de Auditoria
+**Arquivo**: Exportação padrão de ocorrências do PontoMais
+**Estrutura**: 
+- Ignora 3 primeiras linhas (cabeçalho)
+- Ignora 12 últimas linhas (rodapé)
+- Colunas: `Nome`, `Equipe`, `Data`, `Ocorrência`, `Valor`
+
+**Ocorrências Tratadas**:
+- ✅ **Falta**: Faltas não justificadas
+- ✅ **Horas Faltantes**: Devem ser > 1 hora
+- ✅ **Horas Extras**: Devem ser > 2 horas
+- ✅ **Mais de 6 dias consecutivos**: Alerta para folgas
+- ✅ **Interjornada insuficiente**: < 11h entre expedientes
+- ✅ **Intrajornada insuficiente**: Pausa de almoço < 1h
+
+**Filtros Especiais**:
+- Remove faltas "abonadas" ou "justificadas"
+- Opção de ignorar registros de sábado
+- Combina "falta" + "horas faltantes" em mensagem única
+
+### ⚠️ Relatório de Ocorrências
+**Arquivo**: Relatório específico de ocorrências pendentes
+**Estrutura**:
+- Ignora 4 primeiras linhas
+- Ignora 5 últimas linhas
+- Colunas: `Nome`, `Equipe`, `Data`, `Motivo`, `Ação pendente`
+
+**Motivos Válidos**:
+- "Número de pontos menor que o previsto"
+- "Possui pontos durante exceção"
+- "Número errado de pontos"
+
+**Ações Válidas**:
+- "Colaborador solicitar ajuste"
+- "Gestor aprovar solicitação de ajuste"
+- "Gestor corrigir lançamento de exceção"
+
+---
+
+## 🔧 Configuração
+
+### 🗺️ Mapeamento de Equipes
+O sistema converte automaticamente nomes inconsistentes em códigos padronizados:
+
+```python
+# Exemplos de mapeamento
+"Departamento Pessoal" → "DP"
+"CD10", "CD 10", "cd-10" → "CD10"
+"Loja 75", "Loja l 75", "Filial Nova 75" → "75"
+"Gente e Gestão" → "RH"
+"Logística" → "Produtos"
+```
+
+### 📞 Números das Equipes
+Carregados automaticamente via Google Sheets:
+- Coluna 1: Nome da equipe
+- Coluna 2: Número do WhatsApp (formato brasileiro)
+- Limpeza automática: remove prefixos internacionais
+- Validação: números devem ter 10-12 dígitos
+
+### 🎨 Templates de Mensagens
+Personalizados por tipo de ocorrência:
+```python
+TEMPLATES = {
+    "Falta": "*{nome}* _faltou_. Por favor *justificar*.",
+    "Horas Faltantes": "*{nome}* ficou devendo *{horas}*. Por favor *justificar*.",
+    "Horas extras": "*{nome}* fez mais de 2 horas extras. _Total_: *{valor}*. Por favor *ajustar*."
+}
 ```
 
 ---
 
-## 📄 Sobre o Arquivo CSV do PontoMais
+## 📱 Interface do Sistema
 
-O sistema processa arquivos `.CSV` exportados do relatório de **Ocorrências** do PontoMais.
+### 🔐 Conexão WhatsApp
+1. **Status em Tempo Real**: Monitora conexão Evolution API
+2. **QR Code Dinâmico**: Atualizado automaticamente
+3. **Informações do Perfil**: Nome, número e foto do WhatsApp conectado
+4. **Logout Integrado**: Desconexão segura com um clique
 
-### 🔎 Exemplo de colunas
+### 📤 Upload de Arquivos
+- **Drag & Drop**: Arrastar arquivo diretamente na interface
+- **Validação**: Aceita apenas arquivos .CSV
+- **Preview**: Mostra nome do arquivo selecionado
+- **Análise Prévia**: Carrega equipes disponíveis automaticamente
 
-| Nome                        | Equipe                             | Data            | Ocorrência         | Valor  |
-|-----------------------------|-------------------------------------|------------------|---------------------|--------|
-| Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Falta               |        |
-| Nome do funcionário | Departamento do funcionário   | Sáb, 05/07/2025 | Horas Faltantes     | 04:00  |
-| Nome do funcionário | Departamento do funcionário   | Sáb, 11/07/2025 | Mais de duas horas extras     | 02:01  |
+### ⚙️ Configurações
+- **Tipo de Relatório**: Dropdown inteligente (Auditoria/Ocorrências)
+- **Ignorar Sábados**: Checkbox para filtrar registros de fim de semana
+- **Modo Debug**: Exibe dados processados para análise
+- **Seleção de Equipes**: Dropdown multiselect com busca
 
-### 🧠 Regras Aplicadas
+### 📊 Monitoramento
+- **Logs em Tempo Real**: Coloridos por tipo (sucesso/erro/warning/info)
+- **Barra de Progresso**: Indica status do processamento
+- **Estatísticas**: Contadores de mensagens, equipes, sucessos e erros
+- **Panel Debug**: Dados JSON processados (modo desenvolvedor)
 
-- Ignora as 3 primeiras e 12 últimas linhas do CSV
-- Ignora **faltas justificadas** (ex: “abonada”)
-- Remove registros de sábado com falta ou 04:00h (opcional)
-- Mapeia nomes de equipe com base em regras, regex e exceções conhecidas
-- Agrupa ocorrências por colaborador + data para gerar uma mensagem única por grupo
+---
 
-### ✉️ Exemplo de Mensagem
+## 🧠 Lógica de Processamento
 
+### 1️⃣ Carregamento e Validação
+```python
+def carregar_dados(caminho_csv, ignorar_sabados, tipo_relatorio):
+    # Carrega CSV removendo linhas de cabeçalho/rodapé
+    # Aplica filtros específicos por tipo de relatório
+    # Normaliza colunas e formatos de data
+    # Remove registros inválidos
 ```
-*EQUIPE Departamento*
+
+### 2️⃣ Limpeza e Transformação
+```python
+# Normalização de dados
+df.columns = df.columns.str.strip()
+df.rename(columns={"Funcionário": "Nome", "Data do ponto": "Data"})
+
+# Filtros especiais para sábados
+if ignorar_sabados:
+    # Remove "Falta" em sábados
+    # Remove "Horas Faltantes" = 04:00 em sábados
+```
+
+### 3️⃣ Mapeamento de Equipes
+```python
+def mapear_equipe(txt):
+    # Corrige erros comuns: "Loja l 66" → "Loja 66"
+    # Identifica padrões com regex
+    # Aplica regras de negócio específicas
+    # Retorna código padronizado
+```
+
+### 4️⃣ Geração de Mensagens
+```python
+def gerar_mensagem(grupo):
+    # Agrupa por Nome + Data
+    # Identifica combinações especiais (falta + horas faltantes)
+    # Aplica templates personalizados
+    # Remove duplicatas e mensagens desnecessárias
+```
+
+### 5️⃣ Envio e Controle
+```python
+def enviar_whatsapp(numero, mensagem, equipe):
+    # Formata número brasileiro
+    # Envia via Evolution API
+    # Aplica delays entre mensagens
+    # Registra logs detalhados
+```
+
+---
+
+## 📨 Sistema de Mensagens
+
+### 🎯 Mensagem Final Formatada
+```
+*LOJA 75*
 
 *NO DIA 05/07/2025:*
-• Nome do funcionário _faltou e ficou devendo_ 04:00 horas. Foi verificado o motivo da falta?
+• João Silva _faltou_. Por favor *justificar*.
+• Maria Santos ficou devendo *2:30 horas*. Por favor *justificar*.
 
-*NO DIA 11/07/2025:*
-• Nome do funcionário fez mais de 2 horas extras. _Total acumulado_: 02:01. Foi autorizado previamente?
+*NO DIA 06/07/2025:*
+• Pedro Costa fez mais de 2 horas extras. _Total_: *3:15*. Por favor *ajustar*.
 ```
 
----
+### ⚡ Regras Inteligentes
+- **Combinação Falta + Horas Faltantes**: Unifica em mensagem única
+- **Filtro de Tempo**: Horas faltantes < 1h são ignoradas
+- **Faltas Justificadas**: Não geram alertas
+- **Deduplicação**: Remove mensagens idênticas
+- **Ordenação**: Mensagens ordenadas por data
 
-## ✅ Funcionalidades em Destaque
-
-- [x] QR Code dinâmico para autenticação do WhatsApp
-- [x] Upload de CSV com validações robustas
-- [x] Filtros configuráveis (ex: ignorar sábados)
-- [x] Modo Debug para análise dos dados tratados
-- [x] Dropdown interativo para seleção de equipes
-- [x] Mensagens customizadas por tipo de ocorrência
-- [x] Log visual com status por equipe
-- [x] Painel de estatísticas com contadores atualizados em tempo real
-
----
-
-## 🧑‍💻 Contribuição Interna
-
-Para membros da equipe TopFama Tech:
-
-1. Crie uma branch com seu nome ou funcionalidade
-2. Faça alterações localmente e rode com `debug=True`
-3. Submeta PR para revisão com descrição clara do que foi alterado
-4. Use `log/` para validar execuções e o modo debug para validação do dataframe
+### 📞 Controle de Envio
+- **Rate Limiting**: Delay de 4-8 segundos entre mensagens
+- **Retry Logic**: Reenvio automático em caso de falha
+- **Validação de Número**: Números inválidos são rejeitados
+- **Logs Detalhados**: Sucesso/erro por equipe
 
 ---
 
-## 📄 Licença e Privacidade
+## 🔍 Recursos Avançados
 
-Este projeto é de **uso exclusivo e interno da TopFama**.  
-Reprodução, redistribuição ou exposição pública não autorizada é proibida.
+### 🔄 Processamento Assíncrono
+- Interface responsiva durante processamento
+- Feedback visual em tempo real
+- Cancelamento seguro de operações
+- Manutenção de estado da aplicação
+
+### 📊 Analytics Integrado
+```python
+stats = {
+    "total": 15,           # Total de equipes processadas
+    "equipes": 12,         # Equipes únicas
+    "sucesso": 10,         # Envios bem-sucedidos  
+    "erro": 2              # Falhas de envio
+}
+```
+
+### 🎨 Interface Adaptativa
+- **Design Responsivo**: Funciona em desktop/tablet/mobile
+- **Tema Corporativo**: Cores e branding TopFama
+- **Animações Suaves**: Transições e micro-interações
+- **Acessibilidade**: Semântica HTML e contraste adequado
+
+### 🔐 Segurança e Privacidade
+- Upload temporário com limpeza automática
+- Logs com dados sensíveis mascarados
+- Conexão HTTPS obrigatória em produção
+- Tokens de API em variáveis de ambiente
 
 ---
 
-## 🌟 Mensagem Final
+## 🚨 Tratamento de Erros
 
-> *“Lugar de Gente Feliz. Agora, também com código limpo.”*  
-> *"Feito por Bruno di Luca | TopFama | OPS" |*
-> Contato: bruno@grupotopfama.com.br
-> 
+### 📧 Sistema de Alertas
+Em caso de erro crítico, o sistema:
+1. Captura stacktrace completo
+2. Envia log por email para desenvolvedores
+3. Remove arquivos temporários
+4. Exibe mensagem amigável ao usuário
+
+### 🔍 Logs Detalhados
+```python
+# Exemplo de log estruturado
+logging.info(">>> Iniciando processamento CSV: arquivo.csv")
+logging.info(">>> Parâmetros: ignorar_sabados=True, tipo=Auditoria")
+logging.info("🧪 Colunas carregadas: ['Nome', 'Equipe', 'Data', 'Ocorrência', 'Valor']")
+logging.error("❌ Falha ao enviar para LOJA 75: Timeout na API")
+```
+
+### 🛡️ Validações Robustas
+- **Formato de Arquivo**: Apenas .CSV aceitos
+- **Estrutura de Dados**: Validação de colunas obrigatórias
+- **Conexão API**: Retry automático e timeout configurável
+- **Números de Telefone**: Formatação e validação brasileira
+
+---
+
+## 👥 Contribuição
+
+### 🔧 Desenvolvimento Local
+```bash
+# Ativar modo debug
+export FLASK_ENV=development
+
+# Executar com reload automático
+python main.py
+```
+
+### 📝 Padrões de Código
+- **Python**: PEP 8, type hints quando aplicável
+- **JavaScript**: ES6+, módulos nativos, async/await
+- **CSS**: BEM methodology, variáveis CSS customizadas
+- **Commits**: Conventional commits (feat:, fix:, docs:)
+
+### 🧪 Testing
+```bash
+# Modo debug habilitado
+curl -X POST -F "debugMode=true" -F "csvFile=@test.csv" localhost:5000/enviar
+
+# Logs detalhados em /log/
+tail -f log/log_execucao_*.log
+```
+
+### 🚀 Deploy
+1. Configurar variáveis de ambiente de produção
+2. Usar servidor WSGI (Gunicorn, uWSGI)
+3. Configurar reverse proxy (Nginx)
+4. Monitorar logs em produção
+
+---
+
+## 📄 Licença
+
+**Uso Exclusivo TopFama**  
+Este projeto é propriedade da TopFama e destinado exclusivamente para uso interno.
+
+---
+
+## 🌟 Créditos
+
+**Desenvolvido por**: Bruno di Luca  
+**Equipe**: TopFama Technology & Operations  
+**Contato**: bruno@grupotopfama.com.br  
+
+---
+
+*"Automatizando processos, humanizando relações."* 🚀
